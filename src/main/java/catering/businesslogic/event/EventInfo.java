@@ -58,4 +58,12 @@ public class EventInfo implements EventItemInfo {
         }
         return all;
     }
+
+    public boolean providesService(ServiceInfo service) {
+        for(ServiceInfo se : services){
+            if(se.equals(service))
+                return true;
+        }
+        return false;
+    }
 }

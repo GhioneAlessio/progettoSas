@@ -2,6 +2,7 @@ package catering.businesslogic.event;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import catering.businesslogic.menu.Menu;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
@@ -17,11 +18,11 @@ public class ServiceInfo implements EventItemInfo {
     private Time timeStart;
     private Time timeEnd;
     private int participants;
+    private Menu menu;
 
     public ServiceInfo(String name) {
         this.name = name;
     }
-
 
     public String toString() {
         return name + ": " + date + " (" + timeStart + "-" + timeEnd + "), " + participants + " pp.";
@@ -46,7 +47,11 @@ public class ServiceInfo implements EventItemInfo {
                 result.add(serv);
             }
         });
-
+        
         return result;
+    }
+
+    public Menu getMenu(){
+        return this.menu;
     }
 }

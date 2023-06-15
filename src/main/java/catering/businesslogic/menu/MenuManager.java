@@ -195,6 +195,10 @@ public class MenuManager {
         this.notifyItemDescriptionChanged(mi);
     }
 
+    public ArrayList<Recipe> getRecipeBook( ){
+        return 
+    }
+    
     public void deleteItem(MenuItem mi) throws  UseCaseLogicException {
         if (currentMenu == null) throw new UseCaseLogicException();
         Section sec = null;
