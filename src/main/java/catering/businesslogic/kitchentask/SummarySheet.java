@@ -1,21 +1,22 @@
 package catering.businesslogic.kitchentask;
 
-import java.rmi.Remote;
 import java.util.ArrayList;
 
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
 
 public class SummarySheet {
-    private String owner;
+    //TODO : prima owner era di tipo String ma non so da dove fosse comparso quindi indagare
+    private User owner;
     private ArrayList<KitchenTask> tasks;
 
     public SummarySheet(User user){
+        this.owner = user;
         tasks = new ArrayList<>(tasks);
     }
 
     public void addTask(KitchenTask t){
-        tasks.add(t);
+        this.tasks.add(t);
     }
 
     public boolean isOwner(User ch){
@@ -33,4 +34,7 @@ public class SummarySheet {
         return this.tasks;
     }
 
+    public User getOwner() {
+        return owner;
+    }
 }

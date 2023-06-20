@@ -66,4 +66,8 @@ public class EventInfo implements EventItemInfo {
         }
         return false;
     }
+
+    public User getChef(){
+        return this.
+    }
 }

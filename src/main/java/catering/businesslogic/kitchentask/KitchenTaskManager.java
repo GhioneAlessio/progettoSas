@@ -3,6 +3,7 @@ package catering.businesslogic.kitchentask;
 import java.security.Provider.Service;
 import java.util.ArrayList;
 
+import catering.businesslogic.CatERing;
 import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.EventInfo;
 import catering.businesslogic.event.ServiceInfo;
@@ -18,7 +19,7 @@ public class KitchenTaskManager {
 
     public SummarySheet generateSummarySheet(EventInfo event, ServiceInfo service) throws UseCaseLogicException{
         //TODO : sono motlo confuso e non so come implementare sta roba 
-        User user = UserManager.getCurrentUser();
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef() || event.providesService(service) || (event.getChef() != user) || service.getMenu() == null)
             throw new UseCaseLogicException();
 
@@ -42,13 +43,14 @@ public class KitchenTaskManager {
     }
 
     public SummarySheet getSummarySheet(SummarySheet summarySheet) throws UseCaseLogicException{
-        User user = UserManager.getCurrentUser();
+        User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!summarySheet.isOwner(user))
             throw new UseCaseLogicException();
         
         return this.currentSummarySheet;
     }
 
+    //TODO : completare 
     public void insertTask(Recipe rec){
         KitchenTask t = new KitchenTask(rec);
         

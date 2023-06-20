@@ -156,6 +156,16 @@ public class Menu {
         return mi;
     }
 
+    //TODO : non sono sicurissimo sia giusto visto che this.freeItems e' observableList ma dovrebbe essere giusto
+    public ArrayList<Recipe> getNeededRecipes(){
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        for(MenuItem item : this.freeItems)
+            recipes.add(item.getItemRecipe());
+        
+        return recipes;
+    }
+
+
     public int getSectionPosition(Section sec) {
         return this.sections.indexOf(sec);
     }
