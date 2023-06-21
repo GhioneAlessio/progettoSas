@@ -51,9 +51,12 @@ public class KitchenTaskManager {
     }
 
     //TODO : completare 
-    public void insertTask(Recipe rec){
-        KitchenTask t = new KitchenTask(rec);
-        
+    public void insertTask(Recipe rec) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException();
+        KitchenTask newTask = new KitchenTask(rec);
+        this.currentSummarySheet.addTask(newTask);
+        this.notifyKitchenTaskAdded(newTask);
     }
 
     public void moveTask(KitchenTask t, int pos) throws UseCaseLogicException{
@@ -84,9 +87,9 @@ public class KitchenTaskManager {
         for(TaskEventReceiver er : eventReceivers)
             er.updateSheetGenerated(newSumSheet);
     }
-//TODO : da finire 
-    private void notifyKitchenTaskAdded(KitchenTask t){
+
+    private void notifyKitchenTaskAdded(KitchenTask newTask){
         for(TaskEventReceiver er : eventReceivers)
-            er.upd(t);    
+            er.updateKitchenTaskAdded(this.currentSummarySheet, newTask);    
     }
 }

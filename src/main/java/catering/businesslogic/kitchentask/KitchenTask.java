@@ -8,7 +8,7 @@ public class KitchenTask {
     private boolean toPrepare;
     private boolean finished;
     private int estimatedTime;
-    //TODO : prima non erano private, penso debbano esserlo but you know
+    //TODO : prima non erano private, penso debbano esserlo but you know, getter e setter aggiunti ma non sono sicuro di nulla
     private User cook;
     private int quantity;
     private Shift Shift;
@@ -16,6 +16,38 @@ public class KitchenTask {
 
     public KitchenTask(Recipe r) {
         this.recipe = r;
+    }
+    
+    public User getCook() {
+        return cook;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Shift getShift() {
+        return Shift;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setCook(User cook) {
+        this.cook = cook;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setShift(Shift shift) {
+        Shift = shift;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 
     public void setFinished(boolean finished){
