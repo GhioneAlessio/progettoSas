@@ -195,8 +195,11 @@ public class MenuManager {
         this.notifyItemDescriptionChanged(mi);
     }
 
-    public ArrayList<Recipe> getRecipeBook( ){
-        return 
+    //TODO: ricontrollare just in case
+
+    public ObservableList<Recipe> getRecipeBook( ){
+        ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
+        return recipes;
     }
     
     public void deleteItem(MenuItem mi) throws  UseCaseLogicException {

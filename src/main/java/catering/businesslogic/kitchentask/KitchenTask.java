@@ -8,7 +8,6 @@ public class KitchenTask {
     private boolean toPrepare;
     private boolean finished;
     private int estimatedTime;
-    //TODO : prima non erano private, penso debbano esserlo but you know, getter e setter aggiunti ma non sono sicuro di nulla
     private User cook;
     private int quantity;
     private Shift Shift;

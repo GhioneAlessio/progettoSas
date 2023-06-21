@@ -11,14 +11,12 @@ import catering.businesslogic.menu.Menu;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
-import javafx.event.Event;
 
 public class KitchenTaskManager {
     private ArrayList<TaskEventReceiver> eventReceivers;
     private SummarySheet currentSummarySheet;
 
     public SummarySheet generateSummarySheet(EventInfo event, ServiceInfo service) throws UseCaseLogicException{
-        //TODO : sono motlo confuso e non so come implementare sta roba 
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef() || event.providesService(service) || (event.getChef() != user) || service.getMenu() == null)
             throw new UseCaseLogicException();
@@ -61,10 +59,9 @@ public class KitchenTaskManager {
 
     public void moveTask(KitchenTask t, int pos) throws UseCaseLogicException{
         ArrayList<KitchenTask> tasks = currentSummarySheet.getTasks();
-        if(pos < 0 || pos > tasks.size())
+        if(!tasks.contains(t) || pos < 0 || pos > tasks.size())
             throw new UseCaseLogicException();
-
-        // if(!tasks.contains(t))
+        
         currentSummarySheet.moveTask(t, pos);
         this.notifyTaskRearrangered(currentSummarySheet);
     }
@@ -76,11 +73,15 @@ public class KitchenTaskManager {
     }
 
     public ArrayList<Shift> getShiftBoard(){
-        return null;
+        return CatERing.getInstance().getShiftManager().getShiftBoard();
     }
 
-    public void assignKitchenTask(KitchenTask t, Shift s, User c, int time, int qty){
+    //TODO : da completare
+    public void assignKitchenTask(KitchenTask t, Shift s, User c, int time, int qty) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null || this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException();
 
+        this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
     }
 
     private void notifySheetGenerated(SummarySheet newSumSheet){
