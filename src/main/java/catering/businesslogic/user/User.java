@@ -1,11 +1,13 @@
 package catering.businesslogic.user;
 
 import javafx.collections.FXCollections;
+import catering.businesslogic.shift.Shift;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,9 @@ public class User {
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
 
+    //TODO : arrayList dei turni assegnati allo user, forse si deve usare observableList
+    ArrayList<Shift> assaignedShift;
+
     private int id;
     private String username;
     private Set<Role> roles;
@@ -24,10 +29,20 @@ public class User {
         id = 0;
         username = "";
         this.roles = new HashSet<>();
+        assaignedShift = new ArrayList<>();
     }
 
     public boolean isChef() {
         return roles.contains(Role.CHEF);
+    }
+
+    //TODO : disctuterne nel dubbio, se va si deve aggiungere al dcd
+    public boolean isAvaiable(Shift shift){
+        return assaignedShift.contains(shift);
+    }
+    //TODO : gia lo sai
+    public void assignShift(Shift shift){
+        assaignedShift.add(shift);
     }
 
     public String getUserName() {

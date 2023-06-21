@@ -1,6 +1,7 @@
 package catering.businesslogic.kitchentask;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
@@ -29,12 +30,28 @@ public class SummarySheet {
         tasks.add(pos, t);
     }
 
-    // TODO : tutta la parte dei turni fa schifo
-    public void assignKitchenTask(KitchenTask t, Shift s, User c, int time, int qty){
+    // TODO : tutta la parte dei turni fa schifo, non mi fido di quello che ho scritto, miriam salvami
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<Integer> qty){
         t.setToPrepare(true);
         t.setFinished(false);
-        t.setEstimatedTime(time);
-        t.setQuantity(qty);
+        if (time.isPresent()) 
+            t.setEstimatedTime(time.get());
+        
+        if(qty.isPresent())
+            t.setQuantity(qty.get());
+
+        if(c.isPresent() && s.isPresent()){
+            Shift shift = s.get();
+            User cook = c.get();
+            shift.assignUser(cook); 
+            shift.setKitchenTask(t);
+            cook.assignShift(shift);
+            t.setCook(cook);
+        }else if(c.isPresent() && !s.isPresent()){
+            t.setCook(c.get());
+        }else if(!c.isPresent() && s.isPresent()){
+            s.get().setKitchenTask(t);
+        }
     }
 
     public ArrayList<KitchenTask> getTasks(){

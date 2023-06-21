@@ -1,7 +1,7 @@
 package catering.businesslogic.kitchentask;
 
-import java.security.Provider.Service;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import catering.businesslogic.CatERing;
 import catering.businesslogic.UseCaseLogicException;
@@ -76,9 +76,9 @@ public class KitchenTaskManager {
         return CatERing.getInstance().getShiftManager().getShiftBoard();
     }
 
-    //TODO : da completare
-    public void assignKitchenTask(KitchenTask t, Shift s, User c, int time, int qty) throws UseCaseLogicException{
-        if(this.currentSummarySheet == null || this.currentSummarySheet.getTasks().contains(t))
+    //TODO : da completare, usare optional
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<Integer> qty) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException();
 
         this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
