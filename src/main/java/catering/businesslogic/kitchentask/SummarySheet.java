@@ -94,4 +94,18 @@ public class SummarySheet {
     public User getOwner() {
         return owner;
     }
+
+    public String testString() {
+        String result = this.toString() + "\n";
+
+        result += "Owner : " + this.owner.getUserName();
+
+        result += "\n";
+
+        for (KitchenTask t : tasks) {
+            result += t.toString() + "\n";
+        }
+
+        return result;
+    }
 }

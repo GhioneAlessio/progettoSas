@@ -22,7 +22,7 @@ public class TestKitchenTask5a {
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
-            SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().getSummarySheet();
+            // SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().getSummarySheet();
             // Section antipasti = CatERing.getInstance().getMenuManager().defineSection("Antipasti");
             // Section primi = CatERing.getInstance().getMenuManager().defineSection("Primi");
             // Section secondi = CatERing.getInstance().getMenuManager().defineSection("Secondi");

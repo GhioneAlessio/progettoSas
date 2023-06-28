@@ -76,4 +76,12 @@ public class KitchenTask {
     public int getEstimatedTime(){
         return this.estimatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "KitchenTask [toPrepare=" + toPrepare + ", finished=" + finished + ", estimatedTime=" + estimatedTime
+                + ", cook=" + cook + ", quantity=" + quantity + ", shift=" + shift + ", recipe=" + recipe + "]";
+    }
+
+    
 }

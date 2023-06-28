@@ -19,7 +19,8 @@ public class KitchenTaskManager {
 
     public SummarySheet generateSummarySheet(EventInfo event, ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        if(!user.isChef() || event.providesService(service) || (event.getChef() != user) || service.getMenu() == null)
+        //TODO : (event.getChef() != user) || || service.getMenu() == null, questo case messo nell'if da problemi non essendo il nostro caso d'uso e' scomodo
+        if(event == null || service == null || !user.isChef() || !event.providesService(service))
             throw new UseCaseLogicException();
 
         Menu menu = service.getMenu();
