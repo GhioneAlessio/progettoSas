@@ -31,7 +31,7 @@ public class SummarySheet {
     }
 
     // TODO : tutta la parte dei turni fa schifo, non mi fido di quello che ho scritto, miriam salvami
-    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<Integer> qty){
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty){
         t.setToPrepare(true);
         t.setFinished(false);
         if (time.isPresent()) 
@@ -52,6 +52,18 @@ public class SummarySheet {
         }else if(!c.isPresent() && s.isPresent()){
             s.get().setKitchenTask(t);
         }
+    }
+
+
+    public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed) {
+        if(time.isPresent())
+            t.setEstimatedTime(time.get());
+
+        if(qty.isPresent())
+            t.setQuantity(qty.get());
+
+        if(completed.isPresent())
+            t.setFinished(completed.get());        
     }
 
     public void deleteKitchenTask(KitchenTask task, String type){

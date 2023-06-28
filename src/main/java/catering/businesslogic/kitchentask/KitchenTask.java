@@ -6,10 +6,11 @@ import catering.businesslogic.user.User;
 
 public class KitchenTask {
     private boolean toPrepare;
+    //todo: forse completed torna meglio di finished come nome del parametro
     private boolean finished;
     private int estimatedTime;
     private User cook;
-    private int quantity;
+    private String quantity;
     private Shift shift;
     private Recipe recipe;
 
@@ -21,7 +22,7 @@ public class KitchenTask {
         return this.cook;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return this.quantity;
     }
 
@@ -37,7 +38,7 @@ public class KitchenTask {
         this.cook = cook;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 

@@ -1,5 +1,6 @@
 package catering.businesslogic.kitchentask;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -77,15 +78,28 @@ public class KitchenTaskManager {
     }
 
     //TODO : da completare
-    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<Integer> qty) throws UseCaseLogicException{
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) throws UseCaseLogicException{
         //TODO : !this.currentSummarySheet.getTasks().contains(t) si potrebbe spostare dentro summarySheet, cosi' non si deve 
         //recuperare l'elenco delle task, forse ha piu' senso che sia summarySheet ha controllare direttamente se contiene la task t 
         if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException();
 
         this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
+
+        this.notifyKitchenTaskAssigned(currentSummarySheet, t);
     }
-//forse non e' corretto, chiedere ai saggi
+
+    //TODO: cambiare modifyTask in editTask nell ssd
+    public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException();
+
+        this.currentSummarySheet.editTask(t, time, qty, completed);
+        //TODO: notify non consistenti tra codice e ssd
+        this.notifyKitchenTaskEdited(t);
+    }
+
+    //forse non e' corretto, chiedere ai saggi
     public void deleteKitchenTask(KitchenTask task) throws UseCaseLogicException{
         if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(task))
             throw new UseCaseLogicException();
@@ -108,4 +122,15 @@ public class KitchenTaskManager {
         for(TaskEventReceiver er : eventReceivers)
             er.updateKitchenTaskAdded(this.currentSummarySheet, newTask);    
     }
+
+    private void notifyKitchenTaskAssigned(SummarySheet currentSummarySheet2, KitchenTask t) {
+        for(TaskEventReceiver er : eventReceivers)
+            er.updateKitchenTaskAssigned(this.currentSummarySheet, t); 
+    }
+
+    private void notifyKitchenTaskEdited(KitchenTask t) {
+        for(TaskEventReceiver er : eventReceivers)
+            er.updateKitchenTaskEdited(this.currentSummarySheet, t); 
+    }
+
 }
