@@ -11,6 +11,7 @@ import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
 public class EventInfo implements EventItemInfo {
+    //TODO : discutere tutti gli attributi, non capisco se sono dell'evento generico o non
     private int id;
     private String name;
     private Date dateStart;
@@ -18,11 +19,12 @@ public class EventInfo implements EventItemInfo {
     private int participants;
     private User organizer;
 
+    private User Chef;
     private ObservableList<ServiceInfo> services;
 
     public EventInfo(String name) {
         this.name = name;
-        id = 0;
+        id = 0; 
     }
 
     public ObservableList<ServiceInfo> getServices() {
@@ -67,7 +69,11 @@ public class EventInfo implements EventItemInfo {
         return false;
     }
 
+    public void setChef(User chef){
+        this.Chef = chef;
+    }
+
     public User getChef(){
-        return this.
+        return this.Chef;
     }
 }

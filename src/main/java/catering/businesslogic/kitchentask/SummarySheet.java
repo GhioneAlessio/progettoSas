@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import javafx.collections.ObservableList;
 
 public class SummarySheet {
-    //TODO : prima owner era di tipo String ma non so da dove fosse comparso quindi indagare
     private User owner;
     //TODO : observablelist maybe
     private ArrayList<KitchenTask> tasks;
@@ -44,8 +44,8 @@ public class SummarySheet {
             Shift shift = s.get();
             User cook = c.get();
             shift.assignUser(cook); 
-            shift.setKitchenTask(t);
             cook.assignShift(shift);
+            shift.setKitchenTask(t);
             t.setCook(cook);
         }else if(c.isPresent() && !s.isPresent()){
             t.setCook(c.get());
@@ -54,8 +54,29 @@ public class SummarySheet {
         }
     }
 
+    public void deleteKitchenTask(KitchenTask task, String type){
+        //TODO : agguingere tutt i controlli, se prima annullo il compito e poi provo a cancellarlo alcune operazioni potrebbero fare boom
+        this.tasks.remove(task);
+        Shift shift = task.getShift();
+        shift.deleteTask();
+        User cook = task.getCook();
+        cook.removeShift(shift);
+        //si potrebbe togliere credo
+        // task.deleteShift();
+
+        if(type.equals("delete")){
+            task = null;
+        }else if(type.equals("cancel")){
+            task.setToPrepare(false);
+        }
+    }
+
     public ArrayList<KitchenTask> getTasks(){
         return this.tasks;
+    }
+
+    public int getSummarySheetSize(){
+        return this.tasks.size();
     }
 
     public User getOwner() {

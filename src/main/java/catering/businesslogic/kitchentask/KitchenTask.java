@@ -10,7 +10,7 @@ public class KitchenTask {
     private int estimatedTime;
     private User cook;
     private int quantity;
-    private Shift Shift;
+    private Shift shift;
     private Recipe recipe;
 
     public KitchenTask(Recipe r) {
@@ -18,19 +18,19 @@ public class KitchenTask {
     }
     
     public User getCook() {
-        return cook;
+        return this.cook;
     }
 
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
 
     public Shift getShift() {
-        return Shift;
+        return this.shift;
     }
 
     public Recipe getRecipe() {
-        return recipe;
+        return this.recipe;
     }
 
     public void setCook(User cook) {
@@ -42,7 +42,10 @@ public class KitchenTask {
     }
 
     public void setShift(Shift shift) {
-        Shift = shift;
+        this.shift = shift;
+    }
+    public void deleteShift(){
+        this.shift = null;
     }
 
     public void setRecipe(Recipe recipe) {

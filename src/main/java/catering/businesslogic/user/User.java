@@ -38,11 +38,15 @@ public class User {
 
     //TODO : disctuterne nel dubbio, se va si deve aggiungere al dcd
     public boolean isAvaiable(Shift shift){
-        return assaignedShift.contains(shift);
+        return !assaignedShift.contains(shift);
     }
     //TODO : gia lo sai
     public void assignShift(Shift shift){
         assaignedShift.add(shift);
+    }
+
+    public void removeShift(Shift shift){
+        assaignedShift.remove(shift);
     }
 
     public String getUserName() {

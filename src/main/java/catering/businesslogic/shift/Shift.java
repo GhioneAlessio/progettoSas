@@ -11,8 +11,8 @@ public class Shift {
     private Date date;
     private String place;
 
-    //TODO : var che distingue tra turno preparatorio e di servizio (?) costruttore da rivedere + compito da svolgere nel turno
-    private String type;
+    //TODO : costruttore da rivedere + compito da svolgere nel turno
+    
     private KitchenTask kitchenTask;
     //TODO : arrayList di user assegnati a questo turno 
     ArrayList<User> assignedUsers;
@@ -31,6 +31,10 @@ public class Shift {
 
     public void setKitchenTask(KitchenTask kitchenTask){
         this.kitchenTask = kitchenTask;
+    }
+
+    public void deleteTask(){
+        this.kitchenTask = null;
     }
 
     public int getTimeSlot() {
@@ -70,6 +74,6 @@ public class Shift {
 
         Shift tmpShift = (Shift) obj;
 
-        return this.timeSlot ==  tmpShift.getTimeSlot() && (this.date.compareTo(tmpShift.getDate()) == 0) && this.place == tmpShift.getPlace(); 
+        return this.timeSlot ==  tmpShift.getTimeSlot() && (this.date.compareTo(tmpShift.getDate()) == 0); 
     }
 }

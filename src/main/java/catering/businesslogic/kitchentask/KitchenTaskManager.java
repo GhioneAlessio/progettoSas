@@ -58,10 +58,10 @@ public class KitchenTaskManager {
     }
 
     public void moveTask(KitchenTask t, int pos) throws UseCaseLogicException{
-        ArrayList<KitchenTask> tasks = currentSummarySheet.getTasks();
-        if(!tasks.contains(t) || pos < 0 || pos > tasks.size())
+        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException();
-        
+        if(pos < 0 || pos > this.currentSummarySheet.getSummarySheetSize())
+            throw new IllegalArgumentException();
         currentSummarySheet.moveTask(t, pos);
         this.notifyTaskRearrangered(currentSummarySheet);
     }
@@ -76,14 +76,29 @@ public class KitchenTaskManager {
         return CatERing.getInstance().getShiftManager().getShiftBoard();
     }
 
-    //TODO : da completare, usare optional
+    //TODO : da completare
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<Integer> qty) throws UseCaseLogicException{
+        //TODO : !this.currentSummarySheet.getTasks().contains(t) si potrebbe spostare dentro summarySheet, cosi' non si deve 
+        //recuperare l'elenco delle task, forse ha piu' senso che sia summarySheet ha controllare direttamente se contiene la task t 
         if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException();
 
         this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
     }
+//forse non e' corretto, chiedere ai saggi
+    public void deleteKitchenTask(KitchenTask task) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(task))
+            throw new UseCaseLogicException();
 
+        this.currentSummarySheet.deleteKitchenTask(task, "delete");
+    }
+
+    private void cancelKitchenTask(KitchenTask task)throws UseCaseLogicException{
+        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(task))
+            throw new UseCaseLogicException();
+        
+        this.currentSummarySheet.deleteKitchenTask(task, "cancel");
+    }
     private void notifySheetGenerated(SummarySheet newSumSheet){
         for(TaskEventReceiver er : eventReceivers)
             er.updateSheetGenerated(newSumSheet);
