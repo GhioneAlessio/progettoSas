@@ -1,6 +1,6 @@
 package catering.businesslogic.kitchentask;
 
-public interface TaskEventReceiver {
+public interface KitchenTaskReceiver {
     
     public void updateSheetGenerated(SummarySheet sheet);
     public void updateKitchenTaskAdded(SummarySheet sheet, KitchenTask task);

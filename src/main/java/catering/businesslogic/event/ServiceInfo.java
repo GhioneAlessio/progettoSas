@@ -32,7 +32,7 @@ public class ServiceInfo implements EventItemInfo {
 
     public static ObservableList<ServiceInfo> loadServiceInfoForEvent(int event_id) {
         ObservableList<ServiceInfo> result = FXCollections.observableArrayList();
-        String query = "SELECT id, name, service_date, time_start, time_end, expected_participants " +
+        String query = "SELECT id, name, approved_menu_id, service_date, time_start, time_end, expected_participants " +
                 "FROM Services WHERE event_id = " + event_id;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
@@ -44,6 +44,13 @@ public class ServiceInfo implements EventItemInfo {
                 serv.timeStart = rs.getTime("time_start");
                 serv.timeEnd = rs.getTime("time_end");
                 serv.participants = rs.getInt("expected_participants");
+                int approvedMenuId = rs.getInt("approved_menu_id"); 
+                ObservableList<Menu> menuList = Menu.loadAllMenus();    
+                for(Menu m: menuList){
+                    if(m.getId() == approvedMenuId)
+                        serv.menu = m;
+                }
+
                 result.add(serv);
             }
         });

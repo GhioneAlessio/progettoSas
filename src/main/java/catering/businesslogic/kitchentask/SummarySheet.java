@@ -14,7 +14,7 @@ public class SummarySheet {
 
     public SummarySheet(User user){
         this.owner = user;
-        this.tasks = new ArrayList<>(tasks);
+        this.tasks = new ArrayList<>();
     }
 
     public void addTask(KitchenTask t){

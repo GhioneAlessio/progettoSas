@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import catering.businesslogic.CatERing;
 import catering.businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -74,6 +75,7 @@ public class EventInfo implements EventItemInfo {
     }
 
     public User getChef(){
-        return this.Chef;
+        // return this.Chef;
+        return CatERing.getInstance().getUserManager().getCurrentUser();
     }
 }

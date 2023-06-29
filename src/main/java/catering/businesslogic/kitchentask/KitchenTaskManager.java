@@ -14,13 +14,17 @@ import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
 
 public class KitchenTaskManager {
-    private ArrayList<TaskEventReceiver> eventReceivers;
+    private ArrayList<KitchenTaskReceiver> eventReceivers;
     private SummarySheet currentSummarySheet;
+
+    public KitchenTaskManager(){
+        this.eventReceivers = new ArrayList<>();
+    }
 
     public SummarySheet generateSummarySheet(EventInfo event, ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        //TODO : (event.getChef() != user) || || service.getMenu() == null, questo case messo nell'if da problemi non essendo il nostro caso d'uso e' scomodo
-        if(event == null || service == null || !user.isChef() || !event.providesService(service))
+        //TODO : (event.getChef() != user) || service.getMenu() == null, questo case messo nell'if da problemi non essendo il nostro caso d'uso e' scomodo
+        if(event == null || service == null || !user.isChef() || !event.providesService(service) || (event.getChef() != user) || service.getMenu() == null)
             throw new UseCaseLogicException();
 
         Menu menu = service.getMenu();
@@ -69,7 +73,7 @@ public class KitchenTaskManager {
     }
 
     private void notifyTaskRearrangered(SummarySheet summarySheet) {
-        for(TaskEventReceiver er : eventReceivers){
+        for(KitchenTaskReceiver er : eventReceivers){
             er.updateTasksRearranged(summarySheet);
         }
     }
@@ -115,23 +119,30 @@ public class KitchenTaskManager {
         this.currentSummarySheet.deleteKitchenTask(task, "cancel");
     }
     private void notifySheetGenerated(SummarySheet newSumSheet){
-        for(TaskEventReceiver er : eventReceivers)
+        for(KitchenTaskReceiver er : eventReceivers)
             er.updateSheetGenerated(newSumSheet);
     }
 
     private void notifyKitchenTaskAdded(KitchenTask newTask){
-        for(TaskEventReceiver er : eventReceivers)
+        for(KitchenTaskReceiver er : eventReceivers)
             er.updateKitchenTaskAdded(this.currentSummarySheet, newTask);    
     }
 
     private void notifyKitchenTaskAssigned(SummarySheet currentSummarySheet2, KitchenTask t) {
-        for(TaskEventReceiver er : eventReceivers)
+        for(KitchenTaskReceiver er : eventReceivers)
             er.updateKitchenTaskAssigned(this.currentSummarySheet, t); 
     }
 
     private void notifyKitchenTaskEdited(KitchenTask t) {
-        for(TaskEventReceiver er : eventReceivers)
+        for(KitchenTaskReceiver er : eventReceivers)
             er.updateKitchenTaskEdited(this.currentSummarySheet, t); 
     }
 
+    public void addEventReceiver(KitchenTaskReceiver rec) {
+        this.eventReceivers.add(rec);
+    }
+
+    public void removeEventReceiver(KitchenTaskReceiver rec) {
+        this.eventReceivers.remove(rec);
+    }
 }

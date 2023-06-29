@@ -5,6 +5,7 @@ import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.EventInfo;
 import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.kitchentask.SummarySheet;
+import catering.businesslogic.menu.Menu;
 import catering.businesslogic.shift.Shift;
 import javafx.collections.ObservableList;
 
@@ -20,16 +21,12 @@ public class TestKitchenTask {
             System.out.println("\nTEST GENERATE SUMMARY SHEET");
             
             ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();
-            // for (EventInfo e: events) {
-            //     System.out.println(e);
-            //     for (ServiceInfo s: e.getServices()) {
-            //         System.out.println("\t" + s);
-            //     }
-            // }
+      
             EventInfo event = events.get(0);
             ServiceInfo serviceInfo = event.getServices().get(0);
+
             SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().generateSummarySheet(event, serviceInfo);
-            sm.testString();
+            System.out.println(sm.testString());
 
             System.out.println("\nTEST INSERT TASK");
             CatERing.getInstance().getKitchenTaskManager().insertTask(null);
