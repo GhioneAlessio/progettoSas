@@ -83,5 +83,12 @@ public class KitchenTask {
                 + ", cook=" + cook + ", quantity=" + quantity + ", shift=" + shift + ", recipe=" + recipe + "]";
     }
 
-    
+    // STATIC METHODS FOR PERSISTENCE
+    public static void saveNewTask(SummarySheet sheet, KitchenTask task) {
+        // TODO : implementare si deve
+    }
+
+    public static void deleteItem(KitchenTask task) {
+        // TODO : implementare si deve
+    }
 }

@@ -13,12 +13,12 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateKitchenTaskAdded(SummarySheet sheet, KitchenTask task) {
-        // TODO Auto-generated method stub
+        KitchenTask.saveNewTask(sheet, task);
     }
 
     @Override
     public void updateTasksRearranged(SummarySheet sheet) {
-        // TODO Auto-generated method stub
+        SummarySheet.saveTaskOrder(sheet);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateKitchenTaskEdited(SummarySheet currentSummarySheet, KitchenTask t) {
-        // TODO Auto-generated method stub
+            // TODO Auto-generated method stub
     }
 
     @Override
@@ -38,7 +38,7 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateTaskDeleted(KitchenTask task) {
-        // TODO Auto-generated method stub
+        KitchenTask.deleteItem(task);
     }
 
     @Override
