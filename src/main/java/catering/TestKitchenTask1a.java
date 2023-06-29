@@ -16,18 +16,11 @@ import java.util.Map;
 public class TestKitchenTask1a {
  
     public static void main(String[] args) {
-        try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
-            CatERing.getInstance().getUserManager().fakeLogin("Lidia");
-            System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
+    //     try {
+            //TODO : recupera foglio riepilogativo non credo vada fatto come test
 
-            Menu m = CatERing.getInstance().getMenuManager().createMenu("Menu da Cancellare");
-
-            
-        } catch (UseCaseLogicException e) {
-            System.out.println("Errore di logica nello use case");
-        }
-
+    //     } catch (UseCaseLogicException e) {
+    //         System.out.println(e.getMessage());
+    //     }
     }
 }

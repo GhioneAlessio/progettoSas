@@ -1,10 +1,15 @@
 package catering.businesslogic.kitchentask;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import catering.persistence.BatchUpdateHandler;
+import catering.persistence.PersistenceManager;
 import javafx.collections.ObservableList;
 
 public class SummarySheet {
@@ -20,7 +25,7 @@ public class SummarySheet {
     public void addTask(KitchenTask t){
         this.tasks.add(t);
     }   
-
+//TODO : da dove esce sta roba
     public boolean isOwner(User ch){
         return true;
     }
@@ -53,7 +58,6 @@ public class SummarySheet {
             t.setQuantity(qty.get());
     }
 
-
     public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed) {
         if(time.isPresent())
             t.setEstimatedTime(time.get());
@@ -66,12 +70,15 @@ public class SummarySheet {
     }
 
     public void deleteKitchenTask(KitchenTask task, String type){
-        //TODO : agguingere tutt i controlli, se prima annullo il compito e poi provo a cancellarlo alcune operazioni potrebbero fare boom
+        //TODO : al livello del modello la differenza tra cancel e delete e' quasi inesistente, anche mettedno toPrepare = false credo che poi si perda
+        // traccia della task visto che viene rimossa da (arrayList) tasks
         this.tasks.remove(task);
         Shift shift = task.getShift();
-        shift.deleteTask();
         User cook = task.getCook();
-        cook.removeShift(shift);
+        if(shift!= null)
+            shift.deleteTask();
+        if(cook != null && shift != null)
+            cook.removeShift(shift);
         //si potrebbe togliere credo
         // task.deleteShift();
 
@@ -108,4 +115,44 @@ public class SummarySheet {
 
         return result;
     }
+
+    // STATIC METHODS FOR PERSISTENCE
+
+    public static void saveNewSummarySheet(SummarySheet sheet) {
+        // String menuInsert = "INSERT INTO catering.SummarySheets (owner_id) VALUES (?);";
+        // int[] result = PersistenceManager.executeBatchUpdate(menuInsert, 1, new BatchUpdateHandler() {
+        //     @Override
+        //     public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+        //         ps.setInt(1, sheet.getOwner().getId());
+        //         // ps.setInt(2, m.owner.getId());
+        //         // ps.setBoolean(3, m.published);
+        //     }
+
+        //     //TODO : non so se necessaria, al momento la nostra summarySheet neanche lo ha un id
+        //     @Override
+        //     public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+        //         // should be only one
+        //         if (count == 0) {
+        //             // sheet.id = rs.getInt(1);
+        //         }
+        //     }
+        // });
+
+        // if (result[0] > 0) { // menu effettivamente inserito
+        //     // salva le features
+        //     featuresToDB(m);
+
+        //     // salva le sezioni
+        //     if (m.sections.size() > 0) {
+        //         Section.saveAllNewSections(m.id, m.sections);
+        //     }
+
+        //     // salva le voci libere
+        //     if (m.freeItems.size() > 0) {
+        //         MenuItem.saveAllNewItems(m.id, 0, m.freeItems);
+        //     }
+        //     loadedMenus.put(m.id, m);
+        // }
+    }
+
 }

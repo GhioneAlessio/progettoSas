@@ -8,7 +8,7 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateSheetGenerated(SummarySheet sheet) {
-        // TODO Auto-generated method stub
+        SummarySheet.saveNewSummarySheet(sheet);
     }
 
     @Override

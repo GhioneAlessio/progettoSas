@@ -4,45 +4,41 @@ import catering.businesslogic.CatERing;
 import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.EventInfo;
 import catering.businesslogic.event.ServiceInfo;
+import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.kitchentask.SummarySheet;
-import catering.businesslogic.menu.Menu;
-import catering.businesslogic.menu.Section;
-import catering.businesslogic.recipe.Recipe;
 import javafx.collections.ObservableList;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.Optional;
 
 public class TestKitchenTask5a {
     
     public static void main(String[] args) {
         try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
+            System.out.println("TEST FAKE LOGIN");
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
-            // SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().getSummarySheet();
-            // Section antipasti = CatERing.getInstance().getMenuManager().defineSection("Antipasti");
-            // Section primi = CatERing.getInstance().getMenuManager().defineSection("Primi");
-            // Section secondi = CatERing.getInstance().getMenuManager().defineSection("Secondi");
-
-            // ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(0), antipasti);
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(1), antipasti);
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(2), antipasti);
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(6), secondi);
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(7), secondi);
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(3));
-            // CatERing.getInstance().getMenuManager().insertItem(recipes.get(4));
-
-            System.out.println("\nTEST MODIFY TASK");
-            CatERing.getInstance().getKitchenTaskManager().editTask(null, null, null, null);
-            // System.out.println(m.testString());
+            System.out.println("\nTEST GENERATE SUMMARY SHEET");
+            CatERing.getInstance().getMenuManager().getAllMenus();
+            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();      
             
-        } catch (UseCaseLogicException e) {
-            System.out.println("Errore di logica nello use case");
-        }
+            EventInfo event = events.get(0);
+            ServiceInfo serviceInfo = event.getServices().get(0);
 
+            SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().generateSummarySheet(event, serviceInfo);
+            System.out.println(sm.testString());
+            
+            KitchenTask task = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(0);
+
+            System.out.println("\nTEST ASSIGN KITCHEN TASK");
+            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(null), Optional.ofNullable(null), Optional.ofNullable(2), Optional.of("1kg"));
+            System.out.println(sm.testString());
+
+            System.out.println("\nTEST EDIT TASK");
+            CatERing.getInstance().getKitchenTaskManager().editTask(task, Optional.of(1), Optional.of("500g"), Optional.of(true));
+            System.out.println(sm.testString());
+        } catch (UseCaseLogicException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
