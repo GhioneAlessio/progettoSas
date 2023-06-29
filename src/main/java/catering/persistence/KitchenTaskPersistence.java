@@ -9,14 +9,11 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
     @Override
     public void updateSheetGenerated(SummarySheet sheet) {
         // TODO Auto-generated method stub
-        System.out.println("ok");
     }
 
     @Override
     public void updateKitchenTaskAdded(SummarySheet sheet, KitchenTask task) {
         // TODO Auto-generated method stub
-        System.out.println("ok");
-
     }
 
     @Override
@@ -36,6 +33,16 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateKitchenTaskAssigned(SummarySheet currentSummarySheet, KitchenTask t) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void updateTaskDeleted(KitchenTask task) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void updateTaskCanceled(KitchenTask task) {
         // TODO Auto-generated method stub
     }
     

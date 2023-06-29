@@ -34,12 +34,6 @@ public class SummarySheet {
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty){
         t.setToPrepare(true);
         t.setFinished(false);
-        if (time.isPresent()) 
-            t.setEstimatedTime(time.get());
-        
-        if(qty.isPresent())
-            t.setQuantity(qty.get());
-
         if(c.isPresent() && s.isPresent()){
             Shift shift = s.get();
             User cook = c.get();
@@ -52,6 +46,11 @@ public class SummarySheet {
         }else if(!c.isPresent() && s.isPresent()){
             s.get().setKitchenTask(t);
         }
+        if (time.isPresent()) 
+            t.setEstimatedTime(time.get());
+        
+        if(qty.isPresent())
+            t.setQuantity(qty.get());
     }
 
 
@@ -76,9 +75,10 @@ public class SummarySheet {
         //si potrebbe togliere credo
         // task.deleteShift();
 
-        if(type.equals("delete")){
-            task = null;
-        }else if(type.equals("cancel")){
+        // if(type.equals("delete")){
+        //     task = null;
+        // }else
+         if(type.equals("cancel")){
             task.setToPrepare(false);
         }
     }

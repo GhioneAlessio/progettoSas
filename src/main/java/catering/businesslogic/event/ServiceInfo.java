@@ -44,13 +44,7 @@ public class ServiceInfo implements EventItemInfo {
                 serv.timeStart = rs.getTime("time_start");
                 serv.timeEnd = rs.getTime("time_end");
                 serv.participants = rs.getInt("expected_participants");
-                int approvedMenuId = rs.getInt("approved_menu_id"); 
-                ObservableList<Menu> menuList = Menu.loadAllMenus();    
-                for(Menu m: menuList){
-                    if(m.getId() == approvedMenuId)
-                        serv.menu = m;
-                }
-
+                serv.menu = rs.getInt("approved_menu_id") == 0 ? null : Menu.getMenuById(rs.getInt("approved_menu_id"));
                 result.add(serv);
             }
         });
@@ -60,5 +54,9 @@ public class ServiceInfo implements EventItemInfo {
 
     public Menu getMenu(){
         return this.menu;
+    }
+
+    public void setMenu(Menu m){
+        this.menu = m;
     }
 }

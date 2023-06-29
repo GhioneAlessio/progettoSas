@@ -23,9 +23,18 @@ public class KitchenTaskManager {
 
     public SummarySheet generateSummarySheet(EventInfo event, ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        //TODO : (event.getChef() != user) || service.getMenu() == null, questo case messo nell'if da problemi non essendo il nostro caso d'uso e' scomodo
-        if(event == null || service == null || !user.isChef() || !event.providesService(service) || (event.getChef() != user) || service.getMenu() == null)
-            throw new UseCaseLogicException();
+        if(event == null) 
+            throw new UseCaseLogicException("Error event is null");
+        if(service == null)
+            throw new UseCaseLogicException("Error service is null");
+        if(!user.isChef())
+            throw new UseCaseLogicException("Error user is not chef");
+        if(!event.providesService(service))
+            throw new UseCaseLogicException("Error event does not provide service");
+        if((event.getChef() != user)) 
+            throw new UseCaseLogicException("Error event.chef != user");
+        if(service.getMenu() == null)
+            throw new UseCaseLogicException("Error service.menu is null");
 
         Menu menu = service.getMenu();
         ArrayList<Recipe> recipes =  menu.getNeededRecipes();
@@ -57,25 +66,23 @@ public class KitchenTaskManager {
     //TODO : completare 
     public void insertTask(Recipe rec) throws UseCaseLogicException{
         if(this.currentSummarySheet == null)
-            throw new UseCaseLogicException();
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(rec == null)
+            throw new UseCaseLogicException("recipe is null");
         KitchenTask newTask = new KitchenTask(rec);
         this.currentSummarySheet.addTask(newTask);
-        this.notifyKitchenTaskAdded(newTask);
+        this.notifyKitchenTaskAdded(this.currentSummarySheet, newTask);
     }
 
     public void moveTask(KitchenTask t, int pos) throws UseCaseLogicException{
-        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException();
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(!this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
         if(pos < 0 || pos > this.currentSummarySheet.getSummarySheetSize())
             throw new IllegalArgumentException();
         currentSummarySheet.moveTask(t, pos);
         this.notifyTaskRearrangered(currentSummarySheet);
-    }
-
-    private void notifyTaskRearrangered(SummarySheet summarySheet) {
-        for(KitchenTaskReceiver er : eventReceivers){
-            er.updateTasksRearranged(summarySheet);
-        }
     }
 
     public ArrayList<Shift> getShiftBoard(){
@@ -84,58 +91,89 @@ public class KitchenTaskManager {
 
     //TODO : da completare
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) throws UseCaseLogicException{
-        //TODO : !this.currentSummarySheet.getTasks().contains(t) si potrebbe spostare dentro summarySheet, cosi' non si deve 
-        //recuperare l'elenco delle task, forse ha piu' senso che sia summarySheet ha controllare direttamente se contiene la task t 
-        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException();
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(t == null)
+            throw new UseCaseLogicException("task is null");
+        //TODO: si puo' spostare in summarySheet il check sul contains volendo
+        if(!this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
 
         this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
-
         this.notifyKitchenTaskAssigned(currentSummarySheet, t);
     }
 
-    //TODO: cambiare modifyTask in editTask nell ssd
     public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed) throws UseCaseLogicException{
-        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException();
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(t == null)
+            throw new UseCaseLogicException("task is null");
+        if(!this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
 
         this.currentSummarySheet.editTask(t, time, qty, completed);
-        //TODO: notify non consistenti tra codice e ssd
-        this.notifyKitchenTaskEdited(t);
+        this.notifyKitchenTaskEdited(this.currentSummarySheet, t);
     }
 
     //forse non e' corretto, chiedere ai saggi
-    public void deleteKitchenTask(KitchenTask task) throws UseCaseLogicException{
-        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(task))
-            throw new UseCaseLogicException();
+    public void deleteKitchenTask(KitchenTask t) throws UseCaseLogicException{
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(t == null)
+            throw new UseCaseLogicException("task is null");
+        if(!this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
 
-        this.currentSummarySheet.deleteKitchenTask(task, "delete");
+        this.currentSummarySheet.deleteKitchenTask(t, "delete");
+        this.notifyTaskDeleted(t);
     }
 
-    private void cancelKitchenTask(KitchenTask task)throws UseCaseLogicException{
-        if(this.currentSummarySheet == null || !this.currentSummarySheet.getTasks().contains(task))
-            throw new UseCaseLogicException();
+    public void cancelKitchenTask(KitchenTask t)throws UseCaseLogicException{
+        if(this.currentSummarySheet == null)
+            throw new UseCaseLogicException("CurrentSummarySheet is null");
+        if(t == null)
+            throw new UseCaseLogicException("task is null");
+        if(!this.currentSummarySheet.getTasks().contains(t))
+            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+
         
-        this.currentSummarySheet.deleteKitchenTask(task, "cancel");
+        this.currentSummarySheet.deleteKitchenTask(t, "cancel");
+        this.notifyTaskCanceled(t);
     }
     private void notifySheetGenerated(SummarySheet newSumSheet){
         for(KitchenTaskReceiver er : eventReceivers)
             er.updateSheetGenerated(newSumSheet);
     }
 
-    private void notifyKitchenTaskAdded(KitchenTask newTask){
+    private void notifyKitchenTaskAdded(SummarySheet currSummarySheet, KitchenTask newTask){
         for(KitchenTaskReceiver er : eventReceivers)
-            er.updateKitchenTaskAdded(this.currentSummarySheet, newTask);    
+            er.updateKitchenTaskAdded(currSummarySheet, newTask);    
+    }
+    
+    private void notifyTaskRearrangered(SummarySheet currSummarySheet) {
+        for(KitchenTaskReceiver er : eventReceivers){
+            er.updateTasksRearranged(currSummarySheet);
+        }
     }
 
-    private void notifyKitchenTaskAssigned(SummarySheet currentSummarySheet2, KitchenTask t) {
+    private void notifyKitchenTaskAssigned(SummarySheet currSummarySheet, KitchenTask task) {
         for(KitchenTaskReceiver er : eventReceivers)
-            er.updateKitchenTaskAssigned(this.currentSummarySheet, t); 
+            er.updateKitchenTaskAssigned(currSummarySheet, task); 
     }
 
-    private void notifyKitchenTaskEdited(KitchenTask t) {
+    private void notifyKitchenTaskEdited(SummarySheet currSummarySheet, KitchenTask task) {
         for(KitchenTaskReceiver er : eventReceivers)
-            er.updateKitchenTaskEdited(this.currentSummarySheet, t); 
+            er.updateKitchenTaskEdited(currSummarySheet, task); 
+    }
+
+    private void notifyTaskDeleted(KitchenTask task) {
+        for(KitchenTaskReceiver er : eventReceivers)
+            er.updateTaskDeleted(task); 
+    }
+
+    private void notifyTaskCanceled(KitchenTask task) {
+        for(KitchenTaskReceiver er : eventReceivers)
+            er.updateTaskCanceled(task); 
     }
 
     public void addEventReceiver(KitchenTaskReceiver rec) {

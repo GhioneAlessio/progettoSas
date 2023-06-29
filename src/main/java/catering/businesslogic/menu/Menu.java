@@ -156,9 +156,15 @@ public class Menu {
         return mi;
     }
 
-    //TODO : non sono sicurissimo sia giusto visto che this.freeItems e' observableList ma dovrebbe essere giusto
     public ArrayList<Recipe> getNeededRecipes(){
+
         ArrayList<Recipe> recipes = new ArrayList<>();
+        for(Section s : sections){
+            for(MenuItem mi : s.getItems()){
+                recipes.add(mi.getItemRecipe());
+            }
+        }
+
         for(MenuItem item : this.freeItems)
             recipes.add(item.getItemRecipe());
         
@@ -534,5 +540,9 @@ public class Menu {
                 // no generated ids to handle
             }
         });
+    }
+
+    public static Menu getMenuById(int id) {
+        return loadedMenus.get(id);
     }
 }

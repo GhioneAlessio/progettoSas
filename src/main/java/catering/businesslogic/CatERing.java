@@ -1,7 +1,6 @@
 package catering.businesslogic;
 
 import catering.businesslogic.event.EventManager;
-import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.kitchentask.KitchenTaskManager;
 import catering.businesslogic.menu.MenuManager;
 import catering.businesslogic.recipe.RecipeManager;
