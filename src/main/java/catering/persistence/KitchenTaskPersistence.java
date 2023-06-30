@@ -18,32 +18,31 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver {
 
     @Override
     public void updateTasksRearranged(SummarySheet sheet) {
+        //TODO
         SummarySheet.saveTaskOrder(sheet);
     }
 
     @Override
-    public void updateTasksAssigned(SummarySheet sheet) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void updateKitchenTaskEdited(SummarySheet currentSummarySheet, KitchenTask t) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void updateKitchenTaskAssigned(SummarySheet currentSummarySheet, KitchenTask t) {
-        // TODO Auto-generated method stub
+        //TODO 
+        KitchenTask.saveKitchenTaskAssigned(t);
+    }
+
+    public void updateKitchenTaskEdited(SummarySheet currentSummarySheet, KitchenTask task) {
+        //TODO check
+        KitchenTask.saveKitchenTaskEdited(task);
     }
 
     @Override
     public void updateTaskDeleted(KitchenTask task) {
-        KitchenTask.deleteItem(task);
+        //TODO
+        KitchenTask.updateDeleteKitchenTask(task);
     }
 
     @Override
     public void updateTaskCanceled(KitchenTask task) {
-        // TODO Auto-generated method stub
+        //TODO
+        KitchenTask.updateCancelKitchenTask(task);
     }
 
 }

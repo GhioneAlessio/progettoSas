@@ -75,7 +75,7 @@ public class KitchenTask {
         this.estimatedTime = estimatedTime;
     }
 
-    public boolean getFinished() {
+    public boolean getCompleted() {
         return this.completed;
     }
 
@@ -87,6 +87,9 @@ public class KitchenTask {
         return this.estimatedTime;
     }
 
+    public int getId(){
+        return this.id;
+    }
     @Override
     public String toString() {
         return "KitchenTask [toPrepare=" + toPrepare + ", completed=" + completed + ", estimatedTime=" + estimatedTime
@@ -102,7 +105,25 @@ public class KitchenTask {
         task.id = PersistenceManager.getLastId();
     }
 
-    public static void deleteItem(KitchenTask task) {
-        // TODO : implementare si deve
+    public static void saveKitchenTaskEdited(KitchenTask task){
+        String taskEdit = "INSERT INTO catering.KitchenTasks (estimatedTime, quantity, toPrepare, completed) VALUES (" +
+        task.getEstimatedTime() + ", " +
+        task.getQuantity() + "," +
+        task.getToPrepare() + ", " + 
+        task.getCompleted() + ")" +
+        "WHERE id = " + task.getId() + ";";
+        PersistenceManager.executeUpdate(taskEdit);
+    }
+
+    public static void saveKitchenTaskAssigned(KitchenTask task){
+
+    }
+
+    public static void updateDeleteKitchenTask(KitchenTask task) {
+
+    }
+
+    public static void updateCancelKitchenTask(KitchenTask task){
+
     }
 }

@@ -12,7 +12,6 @@ import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
 public class EventInfo implements EventItemInfo {
-    //TODO : discutere tutti gli attributi, non capisco se sono dell'evento generico o non
     private int id;
     private String name;
     private Date dateStart;

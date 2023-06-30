@@ -1,13 +1,13 @@
 package catering.businesslogic.user;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import catering.businesslogic.shift.Shift;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class User {
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
 
     //TODO : arrayList dei turni assegnati allo user, forse si deve usare observableList
-    ArrayList<Shift> assaignedShift;
+    ObservableList<Shift> assaignedShift;
 
     private int id;
     private String username;
@@ -29,7 +29,7 @@ public class User {
         id = 0;
         username = "";
         this.roles = new HashSet<>();
-        assaignedShift = new ArrayList<>();
+        assaignedShift = FXCollections.observableArrayList();
     }
 
     public boolean isChef() {

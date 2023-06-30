@@ -3,7 +3,6 @@ package catering.businesslogic.kitchentask;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import catering.businesslogic.event.ServiceInfo;
@@ -11,20 +10,20 @@ import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
 import catering.persistence.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class SummarySheet {
     private int id;
     private User owner;
     private ServiceInfo service;
-    // TODO : observablelist maybe
-    private ArrayList<KitchenTask> tasks;
+    private ObservableList<KitchenTask> tasks;
 
     public SummarySheet(User user, ServiceInfo service) {
         this.id = 0;
         this.owner = user;
         this.service = service;
-        this.tasks = new ArrayList<>();
+        this.tasks = FXCollections.observableArrayList();
     }
 
     public void addTask(KitchenTask t) {
@@ -115,7 +114,7 @@ public class SummarySheet {
 
     }
 
-    public ArrayList<KitchenTask> getTasks() {
+    public ObservableList<KitchenTask> getTasks() {
         return this.tasks;
     }
 
@@ -154,7 +153,19 @@ public class SummarySheet {
         sm.id = PersistenceManager.getLastId();
     }
 
-    public static void saveTaskOrder(SummarySheet sheet) {
+    public static void saveTaskOrder(SummarySheet sm) {
+        //TODO : gestire il db e questa query
+        String upd = "UPDATE MenuSections SET position = ? WHERE id = ?";
+        PersistenceManager.executeBatchUpdate(upd, sm.tasks.size(), new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, batchCount);
+                ps.setInt(2, sm.tasks.get(batchCount).getId());
+            }
+
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {}
+        });
     }
 
 }
