@@ -18,7 +18,6 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver {
 
     @Override
     public void updateTasksRearranged(SummarySheet sheet) {
-        //TODO
         SummarySheet.saveTaskOrder(sheet);
     }
 
@@ -29,7 +28,6 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver {
     }
 
     public void updateKitchenTaskEdited(SummarySheet currentSummarySheet, KitchenTask task) {
-        //TODO check
         KitchenTask.saveKitchenTaskEdited(task);
     }
 

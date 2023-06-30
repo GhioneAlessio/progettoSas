@@ -80,6 +80,7 @@ CREATE TABLE `KitchenTasks` (
   `quantity` varchar(255) DEFAULT NULL,
   `shift_id` int(11) DEFAULT NULL,
   `recipe_id` int(11) DEFAULT NULL,
+  `position` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

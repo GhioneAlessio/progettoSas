@@ -42,8 +42,7 @@ public class SummarySheet {
 
     // TODO : tutta la parte dei turni fa schifo, non mi fido di quello che ho
     // scritto, miriam salvami
-    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time,
-            Optional<String> qty) {
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) {
         t.setToPrepare(true);
         t.setCompleted(false);
         if (c.isPresent() && s.isPresent()) {
@@ -99,19 +98,15 @@ public class SummarySheet {
     public void cancelKitchenTask(KitchenTask task) {
         Shift shift = task.getShift();
         User cook = task.getCook();
-        if (shift != null)
+        if (shift != null){
             shift.deleteTask();
+            shift.deleteAssignedUser();
+        }
         if (cook != null && shift != null)
             cook.removeShift(shift);
         task.deleteShift();
-        // task.
 
-        // if(type.equals("delete")){
-        // task = null;
-        // }else
-
-        // task.setToPrepare(false);
-
+        task.setToPrepare(false);
     }
 
     public ObservableList<KitchenTask> getTasks() {
@@ -154,8 +149,7 @@ public class SummarySheet {
     }
 
     public static void saveTaskOrder(SummarySheet sm) {
-        //TODO : gestire il db e questa query
-        String upd = "UPDATE MenuSections SET position = ? WHERE id = ?";
+        String upd = "UPDATE KitchenTasks SET position = ? WHERE id = ?";
         PersistenceManager.executeBatchUpdate(upd, sm.tasks.size(), new BatchUpdateHandler() {
             @Override
             public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {

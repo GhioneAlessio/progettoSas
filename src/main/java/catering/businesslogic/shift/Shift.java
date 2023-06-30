@@ -1,7 +1,6 @@
 package catering.businesslogic.shift;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.user.User;
@@ -29,13 +28,17 @@ public class Shift {
     public void assignUser(User u){
         this.assignedUser = u;
     }
-
+    
     public void setKitchenTask(KitchenTask kitchenTask){
         this.kitchenTask = kitchenTask;
     }
-
+    
     public void deleteTask(){
         this.kitchenTask = null;
+    }
+    
+    public void deleteAssignedUser() {
+        this.assignedUser = null;
     }
 
     public int getTimeSlot() {
@@ -62,6 +65,10 @@ public class Shift {
         this.place = place;
     }
 
+    public int getId() {
+        return this.id;
+    }
+    
     @Override
     public boolean equals(Object obj) {
 
@@ -77,4 +84,5 @@ public class Shift {
 
         return this.timeSlot ==  tmpShift.getTimeSlot() && (this.date.compareTo(tmpShift.getDate()) == 0); 
     }
+
 }

@@ -106,24 +106,40 @@ public class KitchenTask {
     }
 
     public static void saveKitchenTaskEdited(KitchenTask task){
-        String taskEdit = "INSERT INTO catering.KitchenTasks (estimatedTime, quantity, toPrepare, completed) VALUES (" +
+        String upd = "UPDATE MenuItems SET position = ? WHERE id = ?";
+    //TODO fare come sopra
+        String taskEdit = "UPDATE catering.KitchenTasks (estimatedTime, quantity, completed) VALUES (" +
         task.getEstimatedTime() + ", " +
         task.getQuantity() + "," +
-        task.getToPrepare() + ", " + 
         task.getCompleted() + ")" +
         "WHERE id = " + task.getId() + ";";
         PersistenceManager.executeUpdate(taskEdit);
     }
 
     public static void saveKitchenTaskAssigned(KitchenTask task){
-
+        String updateTaskAssigned = "UPDATE catering.KitchenTasks toPrepare = " + task.getToPrepare() + ", completed = " + task.getCompleted() +
+        ", quantity = '" + task.getQuantity() + "'', estimatedTime = " + task.getEstimatedTime() + ", cook_id = " + task.getCook().getId() + 
+        ", shift_id" + task.getShift().getId() + " WHERE id =" + task.getId();
+        PersistenceManager.executeUpdate(updateTaskAssigned);
+        //TODO : vedere in futuro se aggiungere l'id (getLastId)
+        if(task.getCook() != null && task.getShift() != null){
+            String newAssignment = "INSERT INTO UserAssignedShift (user_id, shift_id) VALUES (" + task.getCook().getId() + "," + task.getShift().getId()+ ")";
+            PersistenceManager.executeUpdate(newAssignment);
+        }
     }
-
+    
     public static void updateDeleteKitchenTask(KitchenTask task) {
-
+        //DELETE UserAssignedShift dove shiftId = task.shift.id AND cookId = task.cook.id
+        String deleteAssignment = "DELETE FROM UserAssignedShift WHERE user_id = " + task.getCook().getId() + " AND shift_id = " + task.getShift().getId();
+        PersistenceManager.executeUpdate(deleteAssignment);
+        String deleteKitchenTask = "DELETE FROM KitchenTasks WHERE id = " + task.getId();
+        //DELETE catering.KitchenTasks WHERE id =" + task.getId(); 
+        PersistenceManager.executeUpdate(deleteKitchenTask);
     }
 
     public static void updateCancelKitchenTask(KitchenTask task){
-
+        //UPDATE catering.KitchenTasks toPrepare = false WHERE id =" + task.getId();
+        String updateTaskCanceled = "UPDATE catering.KitchenTasks toPrepare = " + task.getToPrepare();
+        PersistenceManager.executeUpdate(updateTaskCanceled);
     }
 }
