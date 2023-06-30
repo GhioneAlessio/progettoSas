@@ -1,8 +1,12 @@
 package catering.businesslogic.kitchentask;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import catering.persistence.PersistenceManager;
 
 public class KitchenTask {
     private int id;
@@ -18,7 +22,7 @@ public class KitchenTask {
         this.id = 0;
         this.recipe = r;
     }
-    
+
     public User getCook() {
         return this.cook;
     }
@@ -47,39 +51,39 @@ public class KitchenTask {
         this.shift = shift;
     }
 
-    public void deleteShift(){
+    public void deleteShift() {
         this.shift = null;
     }
 
-    public void deleteCook(){
+    public void deleteCook() {
         this.cook = null;
     }
-    
+
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 
-    public void setCompleted(boolean completed){
+    public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 
-    public void setToPrepare(boolean toPrepare){
+    public void setToPrepare(boolean toPrepare) {
         this.toPrepare = toPrepare;
     }
 
-    public void setEstimatedTime(int estimatedTime){
+    public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
-    public boolean getFinished(){
+    public boolean getFinished() {
         return this.completed;
     }
 
-    public boolean getToPrepare(){
+    public boolean getToPrepare() {
         return this.toPrepare;
     }
 
-    public int getEstimatedTime(){
+    public int getEstimatedTime() {
         return this.estimatedTime;
     }
 
@@ -90,8 +94,12 @@ public class KitchenTask {
     }
 
     // STATIC METHODS FOR PERSISTENCE
-    public static void saveNewTask(SummarySheet sheet, KitchenTask task) {
-        // TODO : implementare si deve
+    public static void saveNewTask(int sheetId, KitchenTask task) {
+        String taskInsert = "INSERT INTO catering.KitchenTasks (summarySheet_id, recipe_id) VALUES (" +
+                sheetId + ", " +
+                task.getRecipe().getId() + ");";
+        PersistenceManager.executeUpdate(taskInsert);
+        task.id = PersistenceManager.getLastId();
     }
 
     public static void deleteItem(KitchenTask task) {

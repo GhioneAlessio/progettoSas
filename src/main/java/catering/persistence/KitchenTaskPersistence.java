@@ -4,7 +4,7 @@ import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.kitchentask.KitchenTaskReceiver;
 import catering.businesslogic.kitchentask.SummarySheet;
 
-public class KitchenTaskPersistence implements KitchenTaskReceiver{
+public class KitchenTaskPersistence implements KitchenTaskReceiver {
 
     @Override
     public void updateSheetGenerated(SummarySheet sheet) {
@@ -13,7 +13,7 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateKitchenTaskAdded(SummarySheet sheet, KitchenTask task) {
-        KitchenTask.saveNewTask(sheet, task);
+        KitchenTask.saveNewTask(sheet.getId(), task);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
 
     @Override
     public void updateKitchenTaskEdited(SummarySheet currentSummarySheet, KitchenTask t) {
-            // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -45,5 +45,5 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver{
     public void updateTaskCanceled(KitchenTask task) {
         // TODO Auto-generated method stub
     }
-    
+
 }

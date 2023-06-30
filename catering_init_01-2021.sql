@@ -62,6 +62,7 @@ DROP TABLE IF EXISTS `SummarySheets`;
 CREATE TABLE `SummarySheets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
+  `services_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,7 +94,7 @@ CREATE TABLE `Shifts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `UserAssignedShift`;
-CREATE TABLE `UserAvailability` (
+CREATE TABLE `UserAssignedShift` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `shift_id` int(11) DEFAULT NULL,
