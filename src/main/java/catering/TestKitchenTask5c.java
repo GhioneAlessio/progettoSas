@@ -33,7 +33,7 @@ public class TestKitchenTask5c {
             CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(null), Optional.ofNullable(null), Optional.ofNullable(2), Optional.of("1kg"));
             System.out.println(sm.testString());
 
-            System.out.println("\nTEST DELETE TASK");
+            System.out.println("\nTEST CANCEL TASK");
             CatERing.getInstance().getKitchenTaskManager().cancelKitchenTask(task);
             System.out.println(sm.testString());
         } catch (UseCaseLogicException e) {

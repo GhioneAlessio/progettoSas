@@ -42,9 +42,9 @@ public class TestKitchenTask {
             CatERing.getInstance().getKitchenTaskManager().moveTask(task, 5);
             System.out.println(sm.testString());
             
-            System.out.println("\nTEST GET SHIFT BOARD");
-            ArrayList<Shift> shiftBoard = CatERing.getInstance().getKitchenTaskManager().getShiftBoard();
-            System.out.println(shiftBoard.toString());
+            // System.out.println("\nTEST GET SHIFT BOARD");
+            // ArrayList<Shift> shiftBoard = CatERing.getInstance().getKitchenTaskManager().getShiftBoard();
+            // System.out.println(shiftBoard.toString());
 
             System.out.println("\nTEST ASSIGN KITCHEN TASK");
             CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(null), Optional.ofNullable(null), Optional.ofNullable(null), Optional.of("1kg"));

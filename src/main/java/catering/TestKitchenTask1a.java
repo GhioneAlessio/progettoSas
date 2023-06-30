@@ -16,11 +16,26 @@ import java.util.Map;
 public class TestKitchenTask1a {
  
     public static void main(String[] args) {
-    //     try {
-            //TODO : recupera foglio riepilogativo non credo vada fatto come test
+        try {
+            System.out.println("TEST FAKE LOGIN");
+            CatERing.getInstance().getUserManager().fakeLogin("Lidia");
+            System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
 
-    //     } catch (UseCaseLogicException e) {
-    //         System.out.println(e.getMessage());
-    //     }
+            System.out.println("\nTEST GENERATE SUMMARY SHEET");
+            CatERing.getInstance().getMenuManager().getAllMenus();
+            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();      
+            
+            EventInfo event = events.get(0);
+            ServiceInfo serviceInfo = event.getServices().get(0);
+
+            SummarySheet sm = CatERing.getInstance().getKitchenTaskManager().generateSummarySheet(event, serviceInfo);
+            System.out.println(sm.testString());
+
+            // SummarySheet sm2 = recupero dal db
+
+
+        } catch (UseCaseLogicException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

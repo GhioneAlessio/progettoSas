@@ -5,9 +5,9 @@ import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
 
 public class KitchenTask {
+    private int id;
     private boolean toPrepare;
-    //todo: forse completed torna meglio di finished come nome del parametro
-    private boolean finished;
+    private boolean completed;
     private int estimatedTime;
     private User cook;
     private String quantity;
@@ -15,6 +15,7 @@ public class KitchenTask {
     private Recipe recipe;
 
     public KitchenTask(Recipe r) {
+        this.id = 0;
         this.recipe = r;
     }
     
@@ -45,16 +46,21 @@ public class KitchenTask {
     public void setShift(Shift shift) {
         this.shift = shift;
     }
+
     public void deleteShift(){
         this.shift = null;
     }
 
+    public void deleteCook(){
+        this.cook = null;
+    }
+    
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 
-    public void setFinished(boolean finished){
-        this.finished = finished;
+    public void setCompleted(boolean completed){
+        this.completed = completed;
     }
 
     public void setToPrepare(boolean toPrepare){
@@ -66,7 +72,7 @@ public class KitchenTask {
     }
 
     public boolean getFinished(){
-        return this.finished;
+        return this.completed;
     }
 
     public boolean getToPrepare(){
@@ -79,7 +85,7 @@ public class KitchenTask {
 
     @Override
     public String toString() {
-        return "KitchenTask [toPrepare=" + toPrepare + ", finished=" + finished + ", estimatedTime=" + estimatedTime
+        return "KitchenTask [toPrepare=" + toPrepare + ", completed=" + completed + ", estimatedTime=" + estimatedTime
                 + ", cook=" + cook + ", quantity=" + quantity + ", shift=" + shift + ", recipe=" + recipe + "]";
     }
 

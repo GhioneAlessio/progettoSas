@@ -1,6 +1,5 @@
 package catering.businesslogic.kitchentask;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -95,7 +94,6 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException("CurrentSummarySheet is null");
         if(t == null)
             throw new UseCaseLogicException("task is null");
-        //TODO: si puo' spostare in summarySheet il check sul contains volendo
         if(!this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
 
@@ -124,7 +122,7 @@ public class KitchenTaskManager {
         if(!this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
 
-        this.currentSummarySheet.deleteKitchenTask(t, "delete");
+        this.currentSummarySheet.deleteKitchenTask(t);
         this.notifyTaskDeleted(t);
     }
 
@@ -135,9 +133,9 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException("task is null");
         if(!this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
-
+        //TODO : 
         
-        this.currentSummarySheet.deleteKitchenTask(t, "cancel");
+        this.currentSummarySheet.cancelKitchenTask(t);
         this.notifyTaskCanceled(t);
     }
     private void notifySheetGenerated(SummarySheet newSumSheet){

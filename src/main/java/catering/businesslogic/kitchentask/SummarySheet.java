@@ -13,11 +13,13 @@ import catering.persistence.PersistenceManager;
 import javafx.collections.ObservableList;
 
 public class SummarySheet {
+    private int id;
     private User owner;
     //TODO : observablelist maybe
     private ArrayList<KitchenTask> tasks;
 
     public SummarySheet(User user){
+        this.id = 0;
         this.owner = user;
         this.tasks = new ArrayList<>();
     }
@@ -38,7 +40,7 @@ public class SummarySheet {
     // TODO : tutta la parte dei turni fa schifo, non mi fido di quello che ho scritto, miriam salvami
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty){
         t.setToPrepare(true);
-        t.setFinished(false);
+        t.setCompleted(false);
         if(c.isPresent() && s.isPresent()){
             Shift shift = s.get();
             User cook = c.get();
@@ -66,10 +68,10 @@ public class SummarySheet {
             t.setQuantity(qty.get());
 
         if(completed.isPresent())
-            t.setFinished(completed.get());        
+            t.setCompleted(completed.get());        
     }
 
-    public void deleteKitchenTask(KitchenTask task, String type){
+    public void deleteKitchenTask(KitchenTask task){
         //TODO : al livello del modello la differenza tra cancel e delete e' quasi inesistente, anche mettedno toPrepare = false credo che poi si perda
         // traccia della task visto che viene rimossa da (arrayList) tasks
         this.tasks.remove(task);
@@ -85,9 +87,25 @@ public class SummarySheet {
         // if(type.equals("delete")){
         //     task = null;
         // }else
-         if(type.equals("cancel")){
-            task.setToPrepare(false);
-        }
+        
+    }
+
+    public void cancelKitchenTask(KitchenTask task){
+        Shift shift = task.getShift();
+        User cook = task.getCook();
+        if(shift!= null)
+            shift.deleteTask();
+        if(cook != null && shift != null)
+            cook.removeShift(shift);
+        task.deleteShift();
+        // task.
+
+        // if(type.equals("delete")){
+        //     task = null;
+        // }else
+        
+        // task.setToPrepare(false);
+        
     }
 
     public ArrayList<KitchenTask> getTasks(){

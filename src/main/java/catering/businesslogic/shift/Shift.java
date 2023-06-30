@@ -7,6 +7,7 @@ import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.user.User;
 
 public class Shift {
+    private int id;
     private int timeSlot;
     private Date date;
     private String place;
@@ -14,19 +15,19 @@ public class Shift {
     //TODO : costruttore da rivedere + compito da svolgere nel turno
     
     private KitchenTask kitchenTask;
-    //TODO : arrayList di user assegnati a questo turno 
-    ArrayList<User> assignedUsers;
+    private User assignedUser;
 
     public Shift(Date date, int timeSlot, String place) {
+        this.id = 0;
         this.date = date;
         this.timeSlot = timeSlot;
         this.place = place;
-        this.assignedUsers = new ArrayList<>();        
+        // this.assignedUsers = new ArrayList<>();        
     }
 
     //TODO : solita storia, non mi fido di entrambi
     public void assignUser(User u){
-        this.assignedUsers.add(u);
+        this.assignedUser = u;
     }
 
     public void setKitchenTask(KitchenTask kitchenTask){
