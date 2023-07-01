@@ -10,6 +10,7 @@ import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
 import catering.persistence.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
+import catering.persistence.ResultHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -40,8 +41,6 @@ public class SummarySheet {
         tasks.add(pos, t);
     }
 
-    // TODO : tutta la parte dei turni fa schifo, non mi fido di quello che ho
-    // scritto, miriam salvami
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) {
         t.setToPrepare(true);
         t.setCompleted(false);
@@ -52,6 +51,7 @@ public class SummarySheet {
             cook.assignShift(shift);
             shift.setKitchenTask(t);
             t.setCook(cook);
+            t.setShift(shift);
         } else if (c.isPresent() && !s.isPresent()) {
             t.setCook(c.get());
         } else if (!c.isPresent() && s.isPresent()) {
@@ -125,6 +125,10 @@ public class SummarySheet {
         return this.id;
     }
 
+    public ServiceInfo getService(){
+        return this.service;
+    }
+
     public String testString() {
         String result = this.toString() + "\n";
 
@@ -141,11 +145,27 @@ public class SummarySheet {
 
     // STATIC METHODS FOR PERSISTENCE
 
-    public static void saveNewSummarySheet(SummarySheet sm) {
-        String summarySheetInsert = "INSERT INTO catering.SummarySheets (owner_id) VALUES " + sm.getOwner().getId()
-                + ";";
-        PersistenceManager.executeUpdate(summarySheetInsert);
-        sm.id = PersistenceManager.getLastId();
+    public static void saveNewSummarySheet(SummarySheet sm) {//TODO : bisogna tenere conto anche del servizio
+        String summarySheetInsert = "INSERT INTO catering.SummarySheets (owner_id, service_id) VALUES (?, ?);";
+        int[] result = PersistenceManager.executeBatchUpdate(summarySheetInsert, 1, new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, sm.getOwner().getId());
+                ps.setInt(2,  sm.getService().getId());
+            }
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                // should be only one
+                if (count == 0) {
+                    sm.id = rs.getInt(1);
+                }
+            }
+        });
+        if (result[0] > 0) { 
+            if (sm.tasks.size() > 0) {
+                KitchenTask.saveAllNewTasks(sm.id, sm.tasks);
+            }
+        }
     }
 
     public static void saveTaskOrder(SummarySheet sm) {
@@ -160,6 +180,26 @@ public class SummarySheet {
             @Override
             public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {}
         });
+    }
+
+    public static ObservableList<SummarySheet> loadAllSheets() {
+        String query = "SELECT * FROM SummarySheets";
+        ObservableList<SummarySheet> summarySheets = FXCollections.observableArrayList();
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+          @Override
+          public void handle(ResultSet rs) throws SQLException {
+            int ownerId = rs.getInt(2);
+            int serviceId = rs.getInt(3);
+            User owner = User.loadUserById(ownerId);
+            ServiceInfo service = ServiceInfo.loadServiceById(serviceId);
+            SummarySheet sm = new SummarySheet(owner, service);
+            sm.id = rs.getInt(1);
+            sm.tasks = KitchenTask.loadTasksOfSummarySheetById(sm.id);
+
+            summarySheets.add(sm);
+          }
+        });
+        return summarySheets;
     }
 
 }

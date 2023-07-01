@@ -1,12 +1,18 @@
 package catering.businesslogic.kitchentask;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import catering.persistence.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
+import catering.persistence.ResultHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class KitchenTask {
     private int id;
@@ -97,6 +103,7 @@ public class KitchenTask {
     }
 
     // STATIC METHODS FOR PERSISTENCE
+
     public static void saveNewTask(int sheetId, KitchenTask task) {
         String taskInsert = "INSERT INTO catering.KitchenTasks (summarySheet_id, recipe_id) VALUES (" +
                 sheetId + ", " +
@@ -112,15 +119,38 @@ public class KitchenTask {
         task.getEstimatedTime() + ", " +
         task.getQuantity() + "," +
         task.getCompleted() + ")" +
-        "WHERE id = " + task.getId() + ";";
+        " WHERE id = " + task.getId() + ";";
         PersistenceManager.executeUpdate(taskEdit);
     }
 
     public static void saveKitchenTaskAssigned(KitchenTask task){
-        String updateTaskAssigned = "UPDATE catering.KitchenTasks toPrepare = " + task.getToPrepare() + ", completed = " + task.getCompleted() +
-        ", quantity = '" + task.getQuantity() + "'', estimatedTime = " + task.getEstimatedTime() + ", cook_id = " + task.getCook().getId() + 
-        ", shift_id" + task.getShift().getId() + " WHERE id =" + task.getId();
-        PersistenceManager.executeUpdate(updateTaskAssigned);
+        String updateTaskAssigned = "UPDATE catering.KitchenTasks SET toPrepare = ?, completed = ?, quantity = ?, estimatedTime = ?, cook_id = ?, shift_id = ? WHERE id = ?";
+
+        PersistenceManager.executeBatchUpdate(updateTaskAssigned, 1 , new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setBoolean(1, task.getToPrepare());
+                ps.setBoolean(2, task.getCompleted());
+                ps.setString(3, task.getQuantity());
+                ps.setInt(4, task.getEstimatedTime());
+        
+                if(task.getCook()!=null)
+                    ps.setInt(5, task.getCook().getId());
+                else   
+                    ps.setNull(5, Types.INTEGER);
+
+                if(task.getShift()!=null)
+                    ps.setInt(6, task.getShift().getId());
+                else   
+                    ps.setNull(6, Types.INTEGER);
+
+                ps.setInt(7, task.getId());
+            }
+
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {}
+
+        });
         //TODO : vedere in futuro se aggiungere l'id (getLastId)
         if(task.getCook() != null && task.getShift() != null){
             String newAssignment = "INSERT INTO UserAssignedShift (user_id, shift_id) VALUES (" + task.getCook().getId() + "," + task.getShift().getId()+ ")";
@@ -141,5 +171,46 @@ public class KitchenTask {
         //UPDATE catering.KitchenTasks toPrepare = false WHERE id =" + task.getId();
         String updateTaskCanceled = "UPDATE catering.KitchenTasks toPrepare = " + task.getToPrepare();
         PersistenceManager.executeUpdate(updateTaskCanceled);
+    }
+
+    public static void saveAllNewTasks(int smId, ObservableList<KitchenTask> tasks) {
+        String taskInsert = "INSERT INTO catering.KitchenTasks (summarySheet_id, recipe_id, position) VALUES (?, ?, ?);";
+        PersistenceManager.executeBatchUpdate(taskInsert, tasks.size(), new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, smId);
+                ps.setInt(2, tasks.get(batchCount).getRecipe().getId());
+                ps.setInt(3, batchCount);
+            }
+
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                tasks.get(count).id = rs.getInt(1);
+            }
+        });
+    }
+
+    public static ObservableList<KitchenTask> loadTasksOfSummarySheetById(int smId){
+        String selectTasks = "SELECT * FROM KitchenTasks WHERE summarySheet_id = " + smId;
+
+        ObservableList<KitchenTask> tasksList = FXCollections.observableArrayList();
+
+        PersistenceManager.executeQuery(selectTasks, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                KitchenTask task = new KitchenTask(Recipe.loadRecipeById(rs.getInt("recipe_id")));
+                task.id = rs.getInt(1);
+                task.cook = User.loadUserById(rs.getInt("cook_id"));
+                task.shift = Shift.loadShiftById(rs.getInt("shift_id"));
+                task.shift = null;
+                task.toPrepare = rs.getBoolean("toPrepare");
+                task.completed = rs.getBoolean("completed");
+                task.estimatedTime = rs.getInt("estimatedTime");
+                task.quantity = rs.getString("quantity");
+                tasksList.add(task);
+            }
+        });         
+
+        return tasksList; 
     }
 }

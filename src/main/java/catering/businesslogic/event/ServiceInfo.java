@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ServiceInfo implements EventItemInfo {
     private int id;
@@ -22,6 +23,18 @@ public class ServiceInfo implements EventItemInfo {
 
     public ServiceInfo(String name) {
         this.name = name;
+    }
+
+    public Menu getMenu(){
+        return this.menu;
+    }
+
+    public void setMenu(Menu m){
+        this.menu = m;
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     public String toString() {
@@ -48,15 +61,28 @@ public class ServiceInfo implements EventItemInfo {
                 result.add(serv);
             }
         });
-        
         return result;
     }
 
-    public Menu getMenu(){
-        return this.menu;
-    }
+    public static ServiceInfo loadServiceById(int serviceId){
+        String query = "SELECT name, approved_menu_id, service_date, time_start, time_end, expected_participants " +
+                "FROM Services WHERE id = " + serviceId;
 
-    public void setMenu(Menu m){
-        this.menu = m;
+        AtomicReference<ServiceInfo> servRef = new AtomicReference<>();
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                String sName = rs.getString("name");
+                ServiceInfo serv = new ServiceInfo(sName);
+                serv.id = serviceId;
+                serv.date = rs.getDate("service_date");
+                serv.timeStart = rs.getTime("time_start");
+                serv.timeEnd = rs.getTime("time_end");
+                serv.participants = rs.getInt("expected_participants");
+                serv.menu = rs.getInt("approved_menu_id") == 0 ? null : Menu.getMenuById(rs.getInt("approved_menu_id"));
+                servRef.set(serv);
+            }
+        });       
+        return servRef.get();
     }
 }

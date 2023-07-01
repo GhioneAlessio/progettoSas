@@ -8,12 +8,10 @@ import catering.businesslogic.kitchentask.KitchenTask;
 import catering.businesslogic.kitchentask.SummarySheet;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
+import catering.businesslogic.user.User;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
 import java.util.Optional;
-
-//TODO : i test devono essere indipendenti tra loro e eventuali modifiche al db annullate
 
 public class TestKitchenTask {
     public static void main(String[] args) {
@@ -24,8 +22,8 @@ public class TestKitchenTask {
 
             System.out.println("\nTEST GENERATE SUMMARY SHEET");
             CatERing.getInstance().getMenuManager().getAllMenus();
+            User cook = User.loadUserById(4);
             ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();      
-            
             EventInfo event = events.get(0);
             ServiceInfo serviceInfo = event.getServices().get(0);
 
@@ -42,12 +40,12 @@ public class TestKitchenTask {
             CatERing.getInstance().getKitchenTaskManager().moveTask(task, 5);
             System.out.println(sm.testString());
             
-            // System.out.println("\nTEST GET SHIFT BOARD");
-            // ArrayList<Shift> shiftBoard = CatERing.getInstance().getKitchenTaskManager().getShiftBoard();
-            // System.out.println(shiftBoard.toString());
+            System.out.println("\nTEST GET SHIFT BOARD");
+            ObservableList<Shift> shiftsBoard = CatERing.getInstance().getKitchenTaskManager().getShiftBoard(serviceInfo.getId());
+            System.out.println(shiftsBoard);
 
             System.out.println("\nTEST ASSIGN KITCHEN TASK");
-            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(null), Optional.ofNullable(null), Optional.ofNullable(null), Optional.of("1kg"));
+            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(shiftsBoard.get(1)), Optional.ofNullable(cook), Optional.ofNullable(null), Optional.of("1kg"));
             System.out.println(sm.testString());
 
         } catch (UseCaseLogicException e) {

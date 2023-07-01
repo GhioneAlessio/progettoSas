@@ -11,6 +11,7 @@ import catering.businesslogic.menu.Menu;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import javafx.collections.ObservableList;
 
 public class KitchenTaskManager {
     private ArrayList<KitchenTaskReceiver> eventReceivers;
@@ -30,7 +31,7 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException("Error user is not chef");
         if (!event.providesService(service))
             throw new UseCaseLogicException("Error event does not provide service");
-        if ((event.getChef() != user))
+        if (event.getChef() != user)
             throw new UseCaseLogicException("Error event.chef != user");
         if (service.getMenu() == null)
             throw new UseCaseLogicException("Error service.menu is null");
@@ -58,7 +59,7 @@ public class KitchenTaskManager {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if (!summarySheet.isOwner(user))
             throw new UseCaseLogicException();
-
+        this.setCurrentSumSheet(summarySheet);
         return this.currentSummarySheet;
     }
 
@@ -84,8 +85,8 @@ public class KitchenTaskManager {
         this.notifyTaskRearrangered(currentSummarySheet);
     }
 
-    public ArrayList<Shift> getShiftBoard() {
-        return CatERing.getInstance().getShiftManager().getShiftBoard();
+    public ObservableList<Shift> getShiftBoard(int serivceId) {
+        return CatERing.getInstance().getShiftManager().getShiftBoard(serivceId);
     }
 
     // TODO : da completare
