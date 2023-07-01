@@ -1,7 +1,6 @@
 package catering.businesslogic.user;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import catering.businesslogic.shift.Shift;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
@@ -18,8 +17,6 @@ public class User {
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
 
-    ObservableList<Shift> assaignedShift;
-
     private int id;
     private String username;
     private Set<Role> roles;
@@ -28,22 +25,14 @@ public class User {
         id = 0;
         username = "";
         this.roles = new HashSet<>();
-        assaignedShift = FXCollections.observableArrayList();
     }
 
     public boolean isChef() {
         return roles.contains(Role.CHEF);
     }
 
-    public boolean isAvaiable(Shift shift){
-        return !assaignedShift.contains(shift);
-    }
-    public void assignShift(Shift shift){
-        assaignedShift.add(shift);
-    }
-
-    public void removeShift(Shift shift){
-        assaignedShift.remove(shift);
+    public boolean isAvailable(Shift shift){
+        return true;
     }
 
     public String getUserName() {

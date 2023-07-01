@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import catering.businesslogic.kitchentask.KitchenTask;
-import catering.businesslogic.user.User;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 import javafx.collections.FXCollections;
@@ -18,30 +16,12 @@ public class Shift {
     private Date date;
     private String place;
     private int serviceId;
-    private KitchenTask kitchenTask;
-    private User assignedUser;
 
     public Shift(int serviceId, int timeSlot, Date date) {
         this.id = 0;
         this.serviceId = serviceId;
         this.date = date;
         this.timeSlot = timeSlot;
-    }
-
-    public void assignUser(User u){
-        this.assignedUser = u;
-    }
-    
-    public void setKitchenTask(KitchenTask kitchenTask){
-        this.kitchenTask = kitchenTask;
-    }
-    
-    public void deleteTask(){
-        this.kitchenTask = null;
-    }
-    
-    public void deleteAssignedUser() {
-        this.assignedUser = null;
     }
 
     public int getTimeSlot() {

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
@@ -40,22 +41,21 @@ public class SummarySheet {
         tasks.add(pos, t);
     }
 
-    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) {
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) throws UseCaseLogicException {
         t.setToPrepare(true);
         t.setCompleted(false);
         if (c.isPresent() && s.isPresent()) {
-            Shift shift = s.get();
-            User cook = c.get();
-            shift.assignUser(cook);
-            cook.assignShift(shift);
-            shift.setKitchenTask(t);
-            t.setCook(cook);
-            t.setShift(shift);
+            if(c.get().isAvailable(s.get())){
+                t.setCook(c.get());
+                t.setShift(s.get());
+            }else
+                throw new UseCaseLogicException("Error Cook not available in Shift");
         } else if (c.isPresent() && !s.isPresent()) {
             t.setCook(c.get());
         } else if (!c.isPresent() && s.isPresent()) {
-            s.get().setKitchenTask(t);
+            t.setShift(s.get());
         }
+
         if (time.isPresent())
             t.setEstimatedTime(time.get());
 
@@ -76,25 +76,9 @@ public class SummarySheet {
 
     public void deleteKitchenTask(KitchenTask task) {
         this.tasks.remove(task);
-        Shift shift = task.getShift();
-        User cook = task.getCook();
-        if (shift != null)
-            shift.deleteTask();
-        if (cook != null && shift != null)
-            cook.removeShift(shift);
     }
 
     public void cancelKitchenTask(KitchenTask task) {
-        Shift shift = task.getShift();
-        User cook = task.getCook();
-        if (shift != null){
-            shift.deleteTask();
-            shift.deleteAssignedUser();
-        }
-        if (cook != null && shift != null)
-            cook.removeShift(shift);
-        task.deleteShift();
-
         task.setToPrepare(false);
     }
 

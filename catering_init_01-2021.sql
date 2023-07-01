@@ -340,13 +340,13 @@ UNLOCK TABLES;
 -- Table structure for table `UserAssignedShift`
 --
 
-DROP TABLE IF EXISTS `UserAssignedShift`;
-CREATE TABLE `UserAssignedShift` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `shift_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `UserAssignedShift`;
+-- CREATE TABLE `UserAssignedShift` (
+--   `id` int(11) NOT NULL AUTO_INCREMENT,
+--   `user_id` int(11) DEFAULT NULL,
+--   `shift_id` int(11) DEFAULT NULL,
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

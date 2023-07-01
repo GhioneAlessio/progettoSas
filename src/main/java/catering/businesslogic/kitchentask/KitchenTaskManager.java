@@ -58,16 +58,16 @@ public class KitchenTaskManager {
     public SummarySheet getSummarySheet(SummarySheet summarySheet) throws UseCaseLogicException {
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if (!summarySheet.isOwner(user))
-            throw new UseCaseLogicException();
+            throw new UseCaseLogicException("Error current user does not own the summary sheet");
         this.setCurrentSumSheet(summarySheet);
         return this.currentSummarySheet;
     }
 
     public void insertTask(Recipe rec) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (rec == null)
-            throw new UseCaseLogicException("recipe is null");
+            throw new UseCaseLogicException("Error recipe is null");
         KitchenTask newTask = new KitchenTask(rec);
         this.currentSummarySheet.addTask(newTask);
         this.notifyKitchenTaskAdded(this.currentSummarySheet, newTask);
@@ -75,9 +75,9 @@ public class KitchenTaskManager {
 
     public void moveTask(KitchenTask t, int pos) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+            throw new UseCaseLogicException("Error currentSummarySheet does not contain tasks");
         if (pos < 0 || pos > this.currentSummarySheet.getSummarySheetSize())
             throw new IllegalArgumentException();
         currentSummarySheet.moveTask(t, pos);
@@ -91,11 +91,11 @@ public class KitchenTaskManager {
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time,
             Optional<String> qty) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (t == null)
-            throw new UseCaseLogicException("task is null");
+            throw new UseCaseLogicException("Error task is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+            throw new UseCaseLogicException("Error currentSummarySheet does not contain task");
 
         this.currentSummarySheet.assignKitchenTask(t, s, c, time, qty);
         this.notifyKitchenTaskAssigned(currentSummarySheet, t);
@@ -104,24 +104,23 @@ public class KitchenTaskManager {
     public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed)
             throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (t == null)
-            throw new UseCaseLogicException("task is null");
+            throw new UseCaseLogicException("Error task is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+            throw new UseCaseLogicException("Error currentSummarySheet does not contain task");
 
         this.currentSummarySheet.editTask(t, time, qty, completed);
         this.notifyKitchenTaskEdited(this.currentSummarySheet, t);
     }
 
-    // forse non e' corretto, chiedere ai saggi
     public void deleteKitchenTask(KitchenTask t) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (t == null)
-            throw new UseCaseLogicException("task is null");
+            throw new UseCaseLogicException("Error task is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+            throw new UseCaseLogicException("Error currentSummarySheet does not contain task");
 
         this.currentSummarySheet.deleteKitchenTask(t);
         this.notifyTaskDeleted(t);
@@ -129,11 +128,13 @@ public class KitchenTaskManager {
 
     public void cancelKitchenTask(KitchenTask t) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
-            throw new UseCaseLogicException("CurrentSummarySheet is null");
+            throw new UseCaseLogicException("Error currentSummarySheet is null");
         if (t == null)
-            throw new UseCaseLogicException("task is null");
+            throw new UseCaseLogicException("Error task is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
-            throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
+            throw new UseCaseLogicException("Error currentSummarySheet does not contain task");
+        if (t.getToPrepare() == false)
+            throw new UseCaseLogicException("Error task not assigned");
 
         this.currentSummarySheet.cancelKitchenTask(t);
         this.notifyTaskCanceled(t);

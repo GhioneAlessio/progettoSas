@@ -7,7 +7,6 @@ DELETE FROM Services WHERE true;
 DELETE FROM Shifts WHERE true;
 DELETE FROM KitchenTasks WHERE true;
 DELETE FROM SummarySheets WHERE true;
-DELETE FROM UserAssignedShift WHERE true;
 
 /* FILL Events*/
 
