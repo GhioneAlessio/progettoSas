@@ -26,6 +26,7 @@ public class KitchenTask {
 
     public KitchenTask(Recipe r) {
         this.id = 0;
+        this.quantity = "";
         this.recipe = r;
     }
 
@@ -99,7 +100,7 @@ public class KitchenTask {
     @Override
     public String toString() {
         return "KitchenTask [toPrepare=" + toPrepare + ", completed=" + completed + ", estimatedTime=" + estimatedTime
-                + ", cook=" + cook + ", quantity=" + quantity + ", shift=" + shift + ", recipe=" + recipe + "]";
+                + ", cook=" + (cook == null ? "" : cook.getUserName()) + ", quantity=" + quantity + ", shift=" + (shift == null ? "" : shift.getId()) + ", recipe=" + recipe + "]";
     }
 
     // STATIC METHODS FOR PERSISTENCE
@@ -111,15 +112,12 @@ public class KitchenTask {
         PersistenceManager.executeUpdate(taskInsert);
         task.id = PersistenceManager.getLastId();
     }
-
     public static void saveKitchenTaskEdited(KitchenTask task){
-        String upd = "UPDATE MenuItems SET position = ? WHERE id = ?";
-    //TODO fare come sopra
-        String taskEdit = "UPDATE catering.KitchenTasks (estimatedTime, quantity, completed) VALUES (" +
-        task.getEstimatedTime() + ", " +
-        task.getQuantity() + "," +
-        task.getCompleted() + ")" +
+        String taskEdit = "UPDATE catering.KitchenTasks SET estimatedTime = " + task.getEstimatedTime() +
+        ", quantity = '" + task.getQuantity() + 
+        "', completed = " + task.getCompleted() +
         " WHERE id = " + task.getId() + ";";
+        System.out.println(taskEdit);
         PersistenceManager.executeUpdate(taskEdit);
     }
 
@@ -159,17 +157,17 @@ public class KitchenTask {
     }
     
     public static void updateDeleteKitchenTask(KitchenTask task) {
-        //DELETE UserAssignedShift dove shiftId = task.shift.id AND cookId = task.cook.id
-        String deleteAssignment = "DELETE FROM UserAssignedShift WHERE user_id = " + task.getCook().getId() + " AND shift_id = " + task.getShift().getId();
-        PersistenceManager.executeUpdate(deleteAssignment);
+        if(task.getCook() != null && task.getShift() != null){
+            String deleteAssignment = "DELETE FROM UserAssignedShift WHERE user_id = " + task.getCook().getId() + " AND shift_id = " + task.getShift().getId();
+            PersistenceManager.executeUpdate(deleteAssignment);
+        }
         String deleteKitchenTask = "DELETE FROM KitchenTasks WHERE id = " + task.getId();
-        //DELETE catering.KitchenTasks WHERE id =" + task.getId(); 
         PersistenceManager.executeUpdate(deleteKitchenTask);
     }
 
     public static void updateCancelKitchenTask(KitchenTask task){
-        //UPDATE catering.KitchenTasks toPrepare = false WHERE id =" + task.getId();
-        String updateTaskCanceled = "UPDATE catering.KitchenTasks toPrepare = " + task.getToPrepare();
+        String updateTaskCanceled = "UPDATE catering.KitchenTasks SET toPrepare = " + task.getToPrepare() + " WHERE id = " + task.getId();
+        System.out.println(updateTaskCanceled);
         PersistenceManager.executeUpdate(updateTaskCanceled);
     }
 

@@ -63,7 +63,6 @@ public class KitchenTaskManager {
         return this.currentSummarySheet;
     }
 
-    // TODO : completare
     public void insertTask(Recipe rec) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
             throw new UseCaseLogicException("CurrentSummarySheet is null");
@@ -89,7 +88,6 @@ public class KitchenTaskManager {
         return CatERing.getInstance().getShiftManager().getShiftBoard(serivceId);
     }
 
-    // TODO : da completare
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time,
             Optional<String> qty) throws UseCaseLogicException {
         if (this.currentSummarySheet == null)
@@ -136,7 +134,6 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException("task is null");
         if (!this.currentSummarySheet.getTasks().contains(t))
             throw new UseCaseLogicException("CurrentSummarySheet does not contain task");
-        // TODO :
 
         this.currentSummarySheet.cancelKitchenTask(t);
         this.notifyTaskCanceled(t);

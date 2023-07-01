@@ -195,8 +195,6 @@ public class MenuManager {
         this.notifyItemDescriptionChanged(mi);
     }
 
-    //TODO: ricontrollare just in case
-
     public ObservableList<Recipe> getRecipeBook( ){
         ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
         return recipes;

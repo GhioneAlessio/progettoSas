@@ -1,5 +1,9 @@
 package catering.persistence;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 // import com.sun.javafx.binding.StringFormatter;
 
 import java.sql.*;
@@ -91,4 +95,42 @@ public class PersistenceManager {
     public static int getLastId() {
         return lastId;
     }
+
+    public static void resetDb() {
+        try (
+            Connection conn = DriverManager.getConnection(url, username, password);
+            Statement statement = conn.createStatement();) {
+    
+          try {
+            BufferedReader reader = new BufferedReader(new FileReader("dbreset.sql"));
+            StringBuilder scriptContent = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+              scriptContent.append(line);
+              scriptContent.append("\n");
+            }
+            reader.close();
+    
+            String[] queries = scriptContent.toString().split(";");
+            for (String query : queries) {
+                query = query.trim();
+                if (query.isEmpty()) {
+                    continue;
+                }
+                // statement.addBatch(query.trim().replace("\n", " "));
+                try{
+                    statement.execute(query);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            // statement.executeBatch();
+          } catch (IOException e) {
+            System.out.println("Cant't read file");
+          }
+    
+        } catch (SQLException ex) {
+          ex.printStackTrace();
+        }
+      }
 }

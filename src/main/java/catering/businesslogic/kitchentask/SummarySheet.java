@@ -31,7 +31,6 @@ public class SummarySheet {
         this.tasks.add(t);
     }
 
-    // TODO : da dove esce sta roba
     public boolean isOwner(User ch) {
         return true;
     }
@@ -76,9 +75,6 @@ public class SummarySheet {
     }
 
     public void deleteKitchenTask(KitchenTask task) {
-        // TODO : al livello del modello la differenza tra cancel e delete e' quasi
-        // inesistente, anche mettedno toPrepare = false credo che poi si perda
-        // traccia della task visto che viene rimossa da (arrayList) tasks
         this.tasks.remove(task);
         Shift shift = task.getShift();
         User cook = task.getCook();
@@ -86,13 +82,6 @@ public class SummarySheet {
             shift.deleteTask();
         if (cook != null && shift != null)
             cook.removeShift(shift);
-        // si potrebbe togliere credo
-        // task.deleteShift();
-
-        // if(type.equals("delete")){
-        // task = null;
-        // }else
-
     }
 
     public void cancelKitchenTask(KitchenTask task) {
@@ -145,7 +134,7 @@ public class SummarySheet {
 
     // STATIC METHODS FOR PERSISTENCE
 
-    public static void saveNewSummarySheet(SummarySheet sm) {//TODO : bisogna tenere conto anche del servizio
+    public static void saveNewSummarySheet(SummarySheet sm) {
         String summarySheetInsert = "INSERT INTO catering.SummarySheets (owner_id, service_id) VALUES (?, ?);";
         int[] result = PersistenceManager.executeBatchUpdate(summarySheetInsert, 1, new BatchUpdateHandler() {
             @Override
@@ -155,7 +144,6 @@ public class SummarySheet {
             }
             @Override
             public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
-                // should be only one
                 if (count == 0) {
                     sm.id = rs.getInt(1);
                 }

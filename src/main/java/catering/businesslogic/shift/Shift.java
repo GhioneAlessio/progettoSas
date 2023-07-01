@@ -18,8 +18,6 @@ public class Shift {
     private Date date;
     private String place;
     private int serviceId;
-    //TODO : costruttore da rivedere + compito da svolgere nel turno
-    
     private KitchenTask kitchenTask;
     private User assignedUser;
 
@@ -30,7 +28,6 @@ public class Shift {
         this.timeSlot = timeSlot;
     }
 
-    //TODO : solita storia, non mi fido di entrambi
     public void assignUser(User u){
         this.assignedUser = u;
     }

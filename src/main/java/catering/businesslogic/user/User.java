@@ -18,7 +18,6 @@ public class User {
 
     public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
 
-    //TODO : arrayList dei turni assegnati allo user, forse si deve usare observableList
     ObservableList<Shift> assaignedShift;
 
     private int id;
@@ -36,11 +35,9 @@ public class User {
         return roles.contains(Role.CHEF);
     }
 
-    //TODO : disctuterne nel dubbio, se va si deve aggiungere al dcd
     public boolean isAvaiable(Shift shift){
         return !assaignedShift.contains(shift);
     }
-    //TODO : gia lo sai
     public void assignShift(Shift shift){
         assaignedShift.add(shift);
     }

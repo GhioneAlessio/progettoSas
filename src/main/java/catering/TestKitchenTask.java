@@ -9,6 +9,7 @@ import catering.businesslogic.kitchentask.SummarySheet;
 import catering.businesslogic.recipe.Recipe;
 import catering.businesslogic.shift.Shift;
 import catering.businesslogic.user.User;
+import catering.persistence.PersistenceManager;
 import javafx.collections.ObservableList;
 
 import java.util.Optional;
@@ -16,6 +17,9 @@ import java.util.Optional;
 public class TestKitchenTask {
     public static void main(String[] args) {
         try {
+
+            PersistenceManager.resetDb();
+
             System.out.println("TEST FAKE LOGIN");
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());

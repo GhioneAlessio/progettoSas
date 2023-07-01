@@ -23,7 +23,6 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver {
 
     @Override
     public void updateKitchenTaskAssigned(SummarySheet currentSummarySheet, KitchenTask t) {
-        //TODO 
         KitchenTask.saveKitchenTaskAssigned(t);
     }
 
@@ -33,13 +32,11 @@ public class KitchenTaskPersistence implements KitchenTaskReceiver {
 
     @Override
     public void updateTaskDeleted(KitchenTask task) {
-        //TODO
         KitchenTask.updateDeleteKitchenTask(task);
     }
 
     @Override
     public void updateTaskCanceled(KitchenTask task) {
-        //TODO
         KitchenTask.updateCancelKitchenTask(task);
     }
 
