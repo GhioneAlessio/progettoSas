@@ -15,7 +15,9 @@ public class User {
 
     private static Map<Integer, User> loadedUsers = FXCollections.observableHashMap();
 
-    public static enum Role {SERVIZIO, CUOCO, CHEF, ORGANIZZATORE};
+    public static enum Role {
+        SERVIZIO, CUOCO, CHEF, ORGANIZZATORE
+    };
 
     private int id;
     private String username;
@@ -31,7 +33,7 @@ public class User {
         return roles.contains(Role.CHEF);
     }
 
-    public boolean isAvailable(Shift shift){
+    public boolean isAvailable(Shift shift) {
         return true;
     }
 
@@ -55,13 +57,22 @@ public class User {
         return result;
     }
 
+    public void addShift(Shift s) {
+        return;
+    }
+
+    public void removeShift(Shift s) {
+        return;
+    }
+
     // STATIC METHODS FOR PERSISTENCE
 
     public static User loadUserById(int uid) {
-        if (loadedUsers.containsKey(uid)) return loadedUsers.get(uid);
+        if (loadedUsers.containsKey(uid))
+            return loadedUsers.get(uid);
 
         User load = new User();
-        String userQuery = "SELECT * FROM Users WHERE id='"+uid+"'";
+        String userQuery = "SELECT * FROM Users WHERE id='" + uid + "'";
         PersistenceManager.executeQuery(userQuery, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
@@ -97,7 +108,7 @@ public class User {
 
     public static User loadUser(String username) {
         User u = new User();
-        String userQuery = "SELECT * FROM Users WHERE username='"+username+"'";
+        String userQuery = "SELECT * FROM Users WHERE username='" + username + "'";
         PersistenceManager.executeQuery(userQuery, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {

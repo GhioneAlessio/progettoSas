@@ -84,8 +84,8 @@ public class KitchenTaskManager {
         this.notifyTaskRearrangered(currentSummarySheet);
     }
 
-    public ObservableList<Shift> getShiftBoard(int serivceId) {
-        return CatERing.getInstance().getShiftManager().getShiftBoard(serivceId);
+    public ObservableList<Shift> getShiftBoard(int serviceId) {
+        return CatERing.getInstance().getShiftManager().getShiftBoard(serviceId);
     }
 
     public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time,
@@ -111,7 +111,7 @@ public class KitchenTaskManager {
             throw new UseCaseLogicException("Error currentSummarySheet does not contain task");
 
         this.currentSummarySheet.editTask(t, time, qty, completed);
-        this.notifyKitchenTaskEdited(this.currentSummarySheet, t);
+        this.notifyKitchenTaskEdited(currentSummarySheet, t);
     }
 
     public void deleteKitchenTask(KitchenTask t) throws UseCaseLogicException {

@@ -41,14 +41,23 @@ public class SummarySheet {
         tasks.add(pos, t);
     }
 
-    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time, Optional<String> qty) throws UseCaseLogicException {
+    public void assignKitchenTask(KitchenTask t, Optional<Shift> s, Optional<User> c, Optional<Integer> time,
+            Optional<String> qty) throws UseCaseLogicException {
         t.setToPrepare(true);
         t.setCompleted(false);
+
+        if (time.isPresent())
+            t.setEstimatedTime(time.get());
+
+        if (qty.isPresent())
+            t.setQuantity(qty.get());
+
         if (c.isPresent() && s.isPresent()) {
-            if(c.get().isAvailable(s.get())){
+            if (c.get().isAvailable(s.get())) {
                 t.setCook(c.get());
                 t.setShift(s.get());
-            }else
+                c.get().addShift(s.get());
+            } else
                 throw new UseCaseLogicException("Error Cook not available in Shift");
         } else if (c.isPresent() && !s.isPresent()) {
             t.setCook(c.get());
@@ -56,11 +65,6 @@ public class SummarySheet {
             t.setShift(s.get());
         }
 
-        if (time.isPresent())
-            t.setEstimatedTime(time.get());
-
-        if (qty.isPresent())
-            t.setQuantity(qty.get());
     }
 
     public void editTask(KitchenTask t, Optional<Integer> time, Optional<String> qty, Optional<Boolean> completed) {
@@ -75,10 +79,12 @@ public class SummarySheet {
     }
 
     public void deleteKitchenTask(KitchenTask task) {
+        task.getCook().removeShift(task.getShift());
         this.tasks.remove(task);
     }
 
     public void cancelKitchenTask(KitchenTask task) {
+        task.getCook().removeShift(task.getShift());
         task.setToPrepare(false);
     }
 
@@ -98,7 +104,7 @@ public class SummarySheet {
         return this.id;
     }
 
-    public ServiceInfo getService(){
+    public ServiceInfo getService() {
         return this.service;
     }
 
@@ -124,8 +130,9 @@ public class SummarySheet {
             @Override
             public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
                 ps.setInt(1, sm.getOwner().getId());
-                ps.setInt(2,  sm.getService().getId());
+                ps.setInt(2, sm.getService().getId());
             }
+
             @Override
             public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
                 if (count == 0) {
@@ -133,7 +140,7 @@ public class SummarySheet {
                 }
             }
         });
-        if (result[0] > 0) { 
+        if (result[0] > 0) {
             if (sm.tasks.size() > 0) {
                 KitchenTask.saveAllNewTasks(sm.id, sm.tasks);
             }
@@ -150,7 +157,8 @@ public class SummarySheet {
             }
 
             @Override
-            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {}
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+            }
         });
     }
 
@@ -158,18 +166,18 @@ public class SummarySheet {
         String query = "SELECT * FROM SummarySheets";
         ObservableList<SummarySheet> summarySheets = FXCollections.observableArrayList();
         PersistenceManager.executeQuery(query, new ResultHandler() {
-          @Override
-          public void handle(ResultSet rs) throws SQLException {
-            int ownerId = rs.getInt(2);
-            int serviceId = rs.getInt(3);
-            User owner = User.loadUserById(ownerId);
-            ServiceInfo service = ServiceInfo.loadServiceById(serviceId);
-            SummarySheet sm = new SummarySheet(owner, service);
-            sm.id = rs.getInt(1);
-            sm.tasks = KitchenTask.loadTasksOfSummarySheetById(sm.id);
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                int ownerId = rs.getInt(2);
+                int serviceId = rs.getInt(3);
+                User owner = User.loadUserById(ownerId);
+                ServiceInfo service = ServiceInfo.loadServiceById(serviceId);
+                SummarySheet sm = new SummarySheet(owner, service);
+                sm.id = rs.getInt(1);
+                sm.tasks = KitchenTask.loadTasksOfSummarySheetById(sm.id);
 
-            summarySheets.add(sm);
-          }
+                summarySheets.add(sm);
+            }
         });
         return summarySheets;
     }
