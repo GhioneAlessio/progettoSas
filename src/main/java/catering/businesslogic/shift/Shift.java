@@ -28,28 +28,8 @@ public class Shift {
         return timeSlot;
     }
 
-    public void setTimeSlot(int timeSlot) {
-        this.timeSlot = timeSlot;
-    }
-
     public Date getDate() {
         return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public int getId() {
-        return this.id;
     }
     
     @Override
