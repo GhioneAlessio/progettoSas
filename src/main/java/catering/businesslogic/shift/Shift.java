@@ -24,6 +24,10 @@ public class Shift {
         this.timeSlot = timeSlot;
     }
 
+    public int getId(){
+        return this.id;
+    }
+    
     public int getTimeSlot() {
         return timeSlot;
     }
