@@ -51,7 +51,7 @@ public class TestKitchenTask {
 
             System.out.println("\nTEST ASSIGN KITCHEN TASK");
             CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task0,
-                    Optional.ofNullable(shiftsBoard.get(1)), Optional.ofNullable(cook), Optional.ofNullable(null),
+                    Optional.ofNullable(shiftsBoard.get(1)), Optional.ofNullable(cook), Optional.ofNullable(20),
                     Optional.of("1kg"));
             KitchenTask task1 = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(1);
             CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task1,
