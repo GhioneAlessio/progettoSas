@@ -26,7 +26,7 @@ public class TestKitchenTask5a {
             KitchenTask task = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(0);
 
             System.out.println("\nTEST EDIT TASK");
-            CatERing.getInstance().getKitchenTaskManager().editTask(task, Optional.of(1), Optional.of("500g"),
+            CatERing.getInstance().getKitchenTaskManager().editTask(task, Optional.of(20), Optional.of("500g"),
                     Optional.ofNullable(null));
             System.out.println(sm.testString());
         } catch (UseCaseLogicException e) {
