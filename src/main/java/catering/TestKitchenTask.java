@@ -27,7 +27,7 @@ public class TestKitchenTask {
             System.out.println("\nTEST GENERATE SUMMARY SHEET");
             CatERing.getInstance().getMenuManager().getAllMenus();
             User cook = User.loadUserById(4);
-            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();      
+            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();
             EventInfo event = events.get(0);
             ServiceInfo serviceInfo = event.getServices().get(0);
 
@@ -38,18 +38,30 @@ public class TestKitchenTask {
             ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
             CatERing.getInstance().getKitchenTaskManager().insertTask(recipes.get(0));
             System.out.println(sm.testString());
-          
+
             System.out.println("\nTEST MOVE TASK");
-            KitchenTask task = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(0);
-            CatERing.getInstance().getKitchenTaskManager().moveTask(task, 5);
+            KitchenTask task0 = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(0);
+            CatERing.getInstance().getKitchenTaskManager().moveTask(task0, 5);
             System.out.println(sm.testString());
-            
+
             System.out.println("\nTEST GET SHIFT BOARD");
-            ObservableList<Shift> shiftsBoard = CatERing.getInstance().getKitchenTaskManager().getShiftBoard(serviceInfo.getId());
+            ObservableList<Shift> shiftsBoard = CatERing.getInstance().getKitchenTaskManager()
+                    .getShiftBoard(serviceInfo.getId());
             System.out.println(shiftsBoard);
 
             System.out.println("\nTEST ASSIGN KITCHEN TASK");
-            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task, Optional.ofNullable(shiftsBoard.get(1)), Optional.ofNullable(cook), Optional.ofNullable(null), Optional.of("1kg"));
+            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task0,
+                    Optional.ofNullable(shiftsBoard.get(1)), Optional.ofNullable(cook), Optional.ofNullable(null),
+                    Optional.of("1kg"));
+            KitchenTask task1 = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(1);
+            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task1,
+                    Optional.ofNullable(shiftsBoard.get(2)), Optional.ofNullable(cook), Optional.ofNullable(30),
+                    Optional.of("500g"));
+            KitchenTask task2 = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(3);
+            CatERing.getInstance().getKitchenTaskManager().assignKitchenTask(task2,
+                    Optional.ofNullable(null), Optional.ofNullable(cook), Optional.ofNullable(50),
+                    Optional.of("1kg"));
+
             System.out.println(sm.testString());
 
         } catch (UseCaseLogicException e) {

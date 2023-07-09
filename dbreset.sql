@@ -88,12 +88,12 @@ INSERT INTO Shifts (timeslot, date, service_id) VALUES  (7,'2020-09-25',2),
 INSERT INTO SummarySheets (id, owner_id, service_id) VALUES (1, 3, 4);
 
 
-INSERT INTO KitchenTasks (summarySheet_id, recipe_id, position) VALUES (1, 13, 0),
-                                                                       (1, 14, 1),
-                                                                       (1, 15, 2),
-                                                                       (1, 15, 3),
-                                                                       (1, 16, 4),
-                                                                       (1, 17, 5),
-                                                                       (1, 9, 6);
+INSERT INTO KitchenTasks (summarySheet_id, recipe_id, position, toPrepare, estimatedTime, quantity) VALUES (1, 13, 0, true, 30,'700g'),
+                                                                       (1, 14, 1, true, 60, '1.5kg'),
+                                                                       (1, 15, 2, true, 40, '700g'),
+                                                                       (1, 15, 3, true, 50, '600g'),
+                                                                       (1, 16, 4, true, 30, '200g'),
+                                                                       (1, 17, 5, true, 20, '150g'),
+                                                                       (1, 9, 6, true, 35, '160g');
 
                                                                        

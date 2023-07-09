@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import java.util.Optional;
 
 public class TestKitchenTask5a {
-    
+
     public static void main(String[] args) {
         try {
             PersistenceManager.resetDb();
@@ -26,7 +26,8 @@ public class TestKitchenTask5a {
             KitchenTask task = CatERing.getInstance().getKitchenTaskManager().getSummarySheet(sm).getTasks().get(0);
 
             System.out.println("\nTEST EDIT TASK");
-            CatERing.getInstance().getKitchenTaskManager().editTask(task, Optional.of(1), Optional.of("500g"), Optional.of(true));
+            CatERing.getInstance().getKitchenTaskManager().editTask(task, Optional.of(1), Optional.of("500g"),
+                    Optional.ofNullable(null));
             System.out.println(sm.testString());
         } catch (UseCaseLogicException e) {
             System.out.println(e.getMessage());
